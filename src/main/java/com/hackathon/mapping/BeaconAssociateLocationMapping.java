@@ -1,12 +1,12 @@
 package com.hackathon.mapping;
 
 import com.hackathon.dto.TrackLocationByTimeReq;
-import com.hackathon.enums.ZoneDetailsEnum;
 import com.hackathon.model.BeaconAssociateLocation;
+import com.hackathon.model.ZoneDetails;
 
 public class BeaconAssociateLocationMapping {
 
-	public static BeaconAssociateLocation mapToModel(int beaconId, int associateId, ZoneDetailsEnum zone,
+	public static BeaconAssociateLocation mapToModel(int beaconId, int associateId, ZoneDetails zone,
 			TrackLocationByTimeReq trackLocationByTimeReq) {
 		BeaconAssociateLocation beaconAssociateLocation = new BeaconAssociateLocation();
 		beaconAssociateLocation.setBeaconId(beaconId);

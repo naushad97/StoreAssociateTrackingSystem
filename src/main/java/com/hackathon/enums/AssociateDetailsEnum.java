@@ -13,17 +13,17 @@ public enum AssociateDetailsEnum {
 	private int associateId;
 	private String name;
 	private String asid;
-	private String userID;
+	private String userId;
 	private String userPw;
-	private int rollID;
+	private int rollId;
 
-	private AssociateDetailsEnum(int associateId, String name, String asid, String userID, String userPw, int rollID) {
+	private AssociateDetailsEnum(int associateId, String name, String asid, String userId, String userPw, int rollID) {
 		this.associateId = associateId;
 		this.name = name;
 		this.asid = asid;
-		this.userID = userID;
+		this.userId = userId;
 		this.userPw = userPw;
-		this.rollID = rollID;
+		this.rollId = rollID;
 	}
 
 	public int getAssociateId() {
@@ -38,12 +38,12 @@ public enum AssociateDetailsEnum {
 		return asid;
 	}
 
-	public String getUserID() {
-		return userID;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getUserPw() {
@@ -54,12 +54,12 @@ public enum AssociateDetailsEnum {
 		this.userPw = userPw;
 	}
 
-	public int getRollID() {
-		return rollID;
+	public int getRollId() {
+		return rollId;
 	}
 
-	public void setRollID(int rollID) {
-		this.rollID = rollID;
+	public void setRollId(int rollId) {
+		this.rollId = rollId;
 	}
 
 	public static boolean checkByASID(String asid) {
@@ -77,5 +77,4 @@ public enum AssociateDetailsEnum {
 		return Arrays.stream(AssociateDetailsEnum.values()).filter(obj -> id == obj.getAssociateId()).findFirst()
 				.orElse(null);
 	}
-
 }

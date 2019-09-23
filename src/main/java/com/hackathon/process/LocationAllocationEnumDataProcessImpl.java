@@ -9,18 +9,14 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.hackathon.model.*;
 import org.springframework.stereotype.Component;
 
 import com.hackathon.dto.LocationAndAssociateDetails;
 import com.hackathon.dto.TrackLocationByTimeReq;
 import com.hackathon.dto.TrackLocationByTimeRsp;
-import com.hackathon.enums.AssociateDetailsEnum;
-import com.hackathon.enums.BeaconDetailsEnum;
 import com.hackathon.enums.ZoneDetailsEnum;
 import com.hackathon.mapping.BeaconAssociateLocationMapping;
-import com.hackathon.model.AssociateInSectionTimeRange;
-import com.hackathon.model.AssociateSectionLocation;
-import com.hackathon.model.BeaconAssociateLocation;
 
 @Component
 public class LocationAllocationEnumDataProcessImpl implements LocationAllocationMapProcess {
@@ -28,21 +24,22 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 	private Map<BeaconAssociateLocation, Long> associateLocationMap = new WeakHashMap<BeaconAssociateLocation, Long>();
 	private Map<AssociateSectionLocation, List<AssociateInSectionTimeRange>> associateTrackermap = new ConcurrentHashMap<AssociateSectionLocation, List<AssociateInSectionTimeRange>>();
 
+
 	public boolean setReqDataToMap(TrackLocationByTimeRsp trackLocationByTimeRsp,
-			TrackLocationByTimeReq trackLocationByTimeReq) {
+								   TrackLocationByTimeReq trackLocationByTimeReq) {
 
 		String uid = trackLocationByTimeReq.getProximityUUID();
-		String appSID = trackLocationByTimeReq.getUserId();
+		String appSId = trackLocationByTimeReq.getUserId();
 		long actionTime = trackLocationByTimeReq.getScanTimeInMillis();
 
-		if (!validateUidAndappSID(trackLocationByTimeRsp, uid, appSID)) {
+		if (!validateUidAndappSID(trackLocationByTimeRsp, uid, appSId)) {
 			return false;
 		}
 
-		BeaconDetailsEnum beaconDetail = BeaconDetailsEnum.findBeaconIDByUID(uid);
+		BeaconDetails beaconDetail = InMemoryData.findBeaconDtlsByUuID(uid);
 		int beaconId = beaconDetail.getBeaconId();
-		ZoneDetailsEnum zone = ZoneDetailsEnum.findZoneByBiconId(beaconDetail.getUid());
-		int associateId = AssociateDetailsEnum.findAssociateByASID(appSID).getAssociateId();
+		ZoneDetails zone = InMemoryData.findZoneByBeaconUuId(beaconDetail.getUuid());
+		int associateId = InMemoryData.findAssociateByAppSID(appSId).getAssociateId();
 
 		BeaconAssociateLocation beaconAssociateLocation = BeaconAssociateLocationMapping.mapToModel(beaconId,
 				associateId, zone, trackLocationByTimeReq);
@@ -59,17 +56,17 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 	@Override
 	public boolean validateUidAndappSID(TrackLocationByTimeRsp trackLocationByTimeRsp, String uid, String appSID) {
 
-		if (!BeaconDetailsEnum.checkByUID(uid)) {
+		if (!InMemoryData.isValidBeaconUuId(uid)) {
 			populateErrorMsg(trackLocationByTimeRsp, "UID = " + uid + ", provided in request, does not matched");
 			return false;
 		}
 
-		if (!ZoneDetailsEnum.checkByBiconId(uid)) {
+		if (!InMemoryData.isZoneExistsByBeaconUuiD(uid)) {
 			populateErrorMsg(trackLocationByTimeRsp, "Zone not found by uid = " + uid);
 			return false;
 		}
 
-		if (!AssociateDetailsEnum.checkByASID(appSID)) {
+		if (!InMemoryData.isValidUser(appSID)) {
 			populateErrorMsg(trackLocationByTimeRsp, "Apps ID = " + appSID + ", provided in request, does not matched");
 			return false;
 		}
@@ -110,11 +107,10 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 			BeaconAssociateLocation beaconAssociateLocation) {
 
 		if (beaconAssociateLocation != null && locationAndAssociateDetails != null) {
-			BeaconDetailsEnum beacon = BeaconDetailsEnum.findBeaconByBeaconId(beaconAssociateLocation.getBeaconId());
-			AssociateDetailsEnum associate = AssociateDetailsEnum
-					.findAssociateByAssociateId(beaconAssociateLocation.getAssociateId());
+			BeaconDetails beacon = InMemoryData.findBeaconByBeaconId(beaconAssociateLocation.getBeaconId());
+			AssociateAccountDetails associate = InMemoryData.findAssociateByAssociateId(beaconAssociateLocation.getAssociateId());
 			if (associate != null) {
-				locationAndAssociateDetails.setAssociateAsid(associate.getAsid());
+				locationAndAssociateDetails.setAssociateAsid(associate.getAppSId());
 				locationAndAssociateDetails.setAssociateName(associate.getName());
 			}
 

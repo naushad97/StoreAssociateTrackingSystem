@@ -6,7 +6,7 @@ public class BeaconAssociateLocation {
 
 	private int beaconId;
 	private int associateId;
-	private ZoneDetailsEnum zone;
+	private ZoneDetails zone;
 	private int major;
 	private int minor;
 	private int power;
@@ -37,11 +37,11 @@ public class BeaconAssociateLocation {
 		this.associateId = associateId;
 	}
 
-	public ZoneDetailsEnum getZone() {
+	public ZoneDetails getZone() {
 		return zone;
 	}
 
-	public void setZone(ZoneDetailsEnum zone) {
+	public void setZone(ZoneDetails zone) {
 		this.zone = zone;
 	}
 

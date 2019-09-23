@@ -1,6 +1,10 @@
 package com.hackathon.enums;
 
+import com.hackathon.model.BeaconDetails;
+import com.hackathon.model.ZoneDetails;
+
 import java.util.Arrays;
+import java.util.List;
 
 public enum ZoneDetailsEnum {
 
@@ -12,13 +16,13 @@ public enum ZoneDetailsEnum {
 
 	private int zoneId;
 	private String zoneName;
-	private int biconId;
+	private int beaconId;
 	private String section;
 
-	private ZoneDetailsEnum(int zoneId, String zoneName, int biconId, String section) {
+	private ZoneDetailsEnum(int zoneId, String zoneName, int beaconId, String section) {
 		this.zoneId = zoneId;
 		this.zoneName = zoneName;
-		this.biconId = biconId;
+		this.beaconId = beaconId;
 		this.section = section;
 	}
 
@@ -30,8 +34,8 @@ public enum ZoneDetailsEnum {
 		return zoneName;
 	}
 
-	public int getBiconId() {
-		return biconId;
+	public int getBeaconId() {
+		return beaconId;
 	}
 
 	public String getSection() {
@@ -40,12 +44,12 @@ public enum ZoneDetailsEnum {
 
 	public static boolean checkByBiconId(String uid) {
 		return BeaconDetailsEnum.checkByUID(uid) ? Arrays.stream(ZoneDetailsEnum.values())
-				.anyMatch((t) -> t.getBiconId() == BeaconDetailsEnum.findBeaconIDByUID(uid).getBeaconId()) : false;
+				.anyMatch((t) -> t.getBeaconId() == BeaconDetailsEnum.findBeaconIDByUID(uid).getBeaconId()) : false;
 	}
 
-	public static ZoneDetailsEnum findZoneByBiconId(String biconId) {
+	public static ZoneDetailsEnum findZoneByBiconId(String beaconId) {
 		return Arrays.stream(ZoneDetailsEnum.values())
-				.filter(obj -> obj.getBiconId() == BeaconDetailsEnum.findBeaconIDByUID(biconId).getBeaconId())
+				.filter(obj -> obj.getBeaconId() == BeaconDetailsEnum.findBeaconIDByUID(beaconId).getBeaconId())
 				.findFirst().orElse(null);
 	}
 	
@@ -54,5 +58,6 @@ public enum ZoneDetailsEnum {
 				.filter(obj -> String.valueOf(obj.getZoneId()).equalsIgnoreCase(zone))
 				.findFirst().orElse(null);
 	}
+
 
 }

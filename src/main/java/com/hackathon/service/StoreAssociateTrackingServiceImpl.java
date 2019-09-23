@@ -1,66 +1,140 @@
 package com.hackathon.service;
 
-import java.util.List;
-import java.util.Map;
-
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackathon.config.AppProperties;
+import com.hackathon.dto.*;
+import com.hackathon.model.*;
+import com.hackathon.process.LocationAllocationEnumDataProcessImpl;
+import com.hackathon.validation.StoreAssociateTrackingValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hackathon.config.AppProperties;
-import com.hackathon.dto.LocationAndAssociateDetails;
-import com.hackathon.dto.LocationOfAssociateRsp;
-import com.hackathon.dto.TrackLocationByTimeReq;
-import com.hackathon.dto.TrackLocationByTimeRsp;
-import com.hackathon.model.AssociateInSectionTimeRange;
-import com.hackathon.process.LocationAllocationEnumDataProcessImpl;
-import com.hackathon.validation.StoreAssociateTrackingValidation;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @Component
 public class StoreAssociateTrackingServiceImpl implements StoreAssociateTrackingService {
 
-	@Autowired
-	private StoreAssociateTrackingValidation storeAssociateTrackingValidation;
+    private static Logger logger = Logger.getLogger(StoreAssociateTrackingServiceImpl.class.getName());
 
-	@Autowired
-	private AppProperties appProperties;
+    @Autowired
+    private StoreAssociateTrackingValidation storeAssociateTrackingValidation;
 
-	@Autowired
-	private LocationAllocationEnumDataProcessImpl locationAllocationEnumDataProcessImpl;
+    @Autowired
+    private AppProperties appProperties;
 
-	@Override
-	public TrackLocationByTimeRsp trackLocationByTime(TrackLocationByTimeReq trackLocationByTimeReq) {
+    @Autowired
+    private LocationAllocationEnumDataProcessImpl locationAllocationEnumDataProcessImpl;
 
-		TrackLocationByTimeRsp trackLocationByTimeRsp = new TrackLocationByTimeRsp();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-		if (!storeAssociateTrackingValidation.validateInputReq(trackLocationByTimeReq, trackLocationByTimeRsp)) {
-			return trackLocationByTimeRsp;
-		} else {
-			if (appProperties.getDatabaseCall()) {
-				System.out.println("From Database");
-			} else {
-				trackLocationByTimeRsp.setSuccessfull(locationAllocationEnumDataProcessImpl
-						.setReqDataToMap(trackLocationByTimeRsp, trackLocationByTimeReq));
-			}
+    @Override
+    public AssociateLogin doLogin(AssociateAccountDetails associateAccountDetails){
+		AssociateAccountDetails accountFound = InMemoryData.findAssociateByAppSID(associateAccountDetails.getUserId());
+
+        logger.info("FilteredResult="+accountFound.toString());
+
+		if(accountFound.getUserPw().equalsIgnoreCase(associateAccountDetails.getUserPw())){
+			new AssociateLogin(accountFound.getAssociateId(), accountFound.getName(), accountFound.getAppSId(), accountFound.getUserId(), accountFound.getRollId(), 1, "Logged In Successfully");
 		}
-		return trackLocationByTimeRsp;
+		return new AssociateLogin(0, "Login failed");
 	}
+
+    @Override
+    public TrackLocationByTimeRsp trackLocationByTime(TrackLocationByTimeReq trackLocationByTimeReq) {
+
+        TrackLocationByTimeRsp trackLocationByTimeRsp = new TrackLocationByTimeRsp();
+
+        if (!storeAssociateTrackingValidation.validateInputReq(trackLocationByTimeReq, trackLocationByTimeRsp)) {
+            return trackLocationByTimeRsp;
+        } else {
+            if (appProperties.getDatabaseCall()) {
+                System.out.println("From Database");
+            } else {
+                trackLocationByTimeRsp.setSuccessfull(locationAllocationEnumDataProcessImpl
+                        .setReqDataToMap(trackLocationByTimeRsp, trackLocationByTimeReq));
+            }
+        }
+        return trackLocationByTimeRsp;
+    }
+
+    @Override
+    public LocationOfAssociateRsp getAllLocationOfAssociate() {
+        LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
+
+        List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl
+                .getAllLocationOfAssociate();
+
+        locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
+
+        return locationOfAssociateRsp;
+    }
+
+    @Override
+    public Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
+
+        return locationAllocationEnumDataProcessImpl.getAllAssociateTrackingData();
+    }
+
+    @Override
+    public List<AssociateAccountDetails> getAssociateAccounts() {
+        List<AssociateAccountDetails> associateAccounts = null;
+        try {
+            InputStream objectStream = getInputStreamFromS3("static/associateAccounts.json");
+            associateAccounts = objectMapper.readValue(objectStream, new TypeReference<List<AssociateAccountDetails>>(){});
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+		InMemoryData.accountDetails = associateAccounts;
+        return associateAccounts;
+    }
 
 	@Override
-	public LocationOfAssociateRsp getAllLocationOfAssociate() {
-		LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
+    public List<ZoneDetails> getZoneDetails() {
+        List<ZoneDetails> zoneDetails = null;
+        try {
+            InputStream objectStream = getInputStreamFromS3("static/zoneDetails.json");
+            zoneDetails = objectMapper.readValue(objectStream, new TypeReference<List<ZoneDetails>>(){});
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl
-				.getAllLocationOfAssociate();
-
-		locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
-
-		return locationOfAssociateRsp;
-	}
+		InMemoryData.zoneDetails = zoneDetails;
+        return zoneDetails;
+    }
 
 	@Override
-	public Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
-		
-		return locationAllocationEnumDataProcessImpl.getAllAssociateTrackingData();
-	}
+    public List<BeaconDetails> getBeaconDetails() {
+        List<BeaconDetails> beaconDetails = null;
+        try {
+            InputStream objectStream = getInputStreamFromS3("static/beaconDetails.json");
+            beaconDetails = objectMapper.readValue(objectStream, new TypeReference<List<BeaconDetails>>(){});
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+		InMemoryData.beaconDetails = beaconDetails;
+        return beaconDetails;
+    }
+
+    private InputStream getInputStreamFromS3(String s) {
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+                .build();
+        S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
+        return object.getObjectContent();
+    }
 
 }

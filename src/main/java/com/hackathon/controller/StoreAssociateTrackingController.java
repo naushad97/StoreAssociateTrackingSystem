@@ -1,55 +1,93 @@
 package com.hackathon.controller;
 
+import com.hackathon.dto.*;
+import com.hackathon.model.AssociateAccountDetails;
+import com.hackathon.model.AssociateInSectionTimeRange;
+import com.hackathon.model.BeaconDetails;
+import com.hackathon.model.ZoneDetails;
+import com.hackathon.service.StoreAssociateTrackingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.hackathon.dto.LocationOfAssociateRsp;
-import com.hackathon.dto.TrackLocationByTimeReq;
-import com.hackathon.dto.TrackLocationByTimeRsp;
-import com.hackathon.model.AssociateInSectionTimeRange;
-import com.hackathon.service.StoreAssociateTrackingService;
+import java.util.logging.Logger;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/storeAssociateTracking")
 public class StoreAssociateTrackingController {
 
-	@Autowired
-	StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
+    private static Logger logger = Logger.getLogger(StoreAssociateTrackingController.class.getName());
 
-	@RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
-	TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
+    @Autowired
+    StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
 
-		System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
+    @RequestMapping(method = RequestMethod.POST, value = "/doLogin")
+    AssociateLogin doLogin(@RequestBody AssociateAccountDetails associateAccount) {
 
-		TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl.trackLocationByTime(trackLocationByTimeReq);
+        logger.info("ReqData="+associateAccount.toString());
 
-		if (trackLocationByTimeRsp.isSuccessfull()) {
-			System.out.println("Sucessfully done");
-		} else {
-			System.out.println("Failed");
-		}
+        storeDataIntoMemory();
 
-		return trackLocationByTimeRsp;
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
-	LocationOfAssociateRsp getAllLocationOfAssociate() {
+        return storeAssociateTrackingServiceImpl.doLogin(associateAccount);
+    }
 
-		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
+    @RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
+    TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
 
-		return locationOfAssociateRsp;
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateTrackingData")
-	Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
+        storeDataIntoMemory();
 
-		return storeAssociateTrackingServiceImpl.getAllAssociateTrackingData();
+        System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
 
-	}
+        TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl.trackLocationByTime(trackLocationByTimeReq);
+
+        if (trackLocationByTimeRsp.isSuccessfull()) {
+            System.out.println("Sucessfully done");
+        } else {
+            System.out.println("Failed");
+        }
+
+        return trackLocationByTimeRsp;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
+    LocationOfAssociateRsp getAllLocationOfAssociate() {
+
+        storeDataIntoMemory();
+
+        LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
+
+        return locationOfAssociateRsp;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateTrackingData")
+    Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
+
+        storeDataIntoMemory();
+
+        return storeAssociateTrackingServiceImpl.getAllAssociateTrackingData();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAssociateDetails")
+    List<AssociateAccountDetails> getAssociateAccounts() {
+        return storeAssociateTrackingServiceImpl.getAssociateAccounts();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getBeaconDetails")
+    List<BeaconDetails> getBeaconDetails() {
+        return storeAssociateTrackingServiceImpl.getBeaconDetails();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getZoneDetails")
+    List<ZoneDetails> getZoneDetails() {
+        return storeAssociateTrackingServiceImpl.getZoneDetails();
+    }
+
+    private void storeDataIntoMemory(){
+        getAssociateAccounts();
+        getBeaconDetails();
+        getZoneDetails();
+    }
+
 }

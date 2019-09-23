@@ -9,6 +9,13 @@ public class BaseRsp implements Serializable {
 	private int status;
 	private String message;
 
+	public BaseRsp(){}
+
+	public BaseRsp(int status, String message) {
+		this.status =1;
+		this.message = message;
+	}
+
 	public int getStatus() {
 		return status;
 	}
