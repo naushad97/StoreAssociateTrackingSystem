@@ -38,13 +38,15 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 
     @Override
     public AssociateLogin doLogin(AssociateAccountDetails associateAccountDetails){
-		AssociateAccountDetails accountFound = InMemoryData.findAssociateByAppSID(associateAccountDetails.getUserId());
+		AssociateAccountDetails accountFound = InMemoryData.findAssociateByAppSID(associateAccountDetails.getAppSId());
 
-        logger.info("FilteredResult="+accountFound.toString());
+        if(accountFound != null){
+            logger.info("FilteredResult="+accountFound.toString());
+            if(accountFound.getUserPw().equalsIgnoreCase(associateAccountDetails.getUserPw())){
+                return new AssociateLogin(accountFound.getAssociateId(), accountFound.getName(), accountFound.getAppSId(), accountFound.getUserId(), accountFound.getRollId(), 1, "Logged In Successfully");
+            }
+        }
 
-		if(accountFound.getUserPw().equalsIgnoreCase(associateAccountDetails.getUserPw())){
-			new AssociateLogin(accountFound.getAssociateId(), accountFound.getName(), accountFound.getAppSId(), accountFound.getUserId(), accountFound.getRollId(), 1, "Logged In Successfully");
-		}
 		return new AssociateLogin(0, "Login failed");
 	}
 
