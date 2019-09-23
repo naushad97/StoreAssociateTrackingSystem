@@ -12,7 +12,7 @@ public class BaseRsp implements Serializable {
 	public BaseRsp(){}
 
 	public BaseRsp(int status, String message) {
-		this.status =1;
+		this.status = status;
 		this.message = message;
 	}
 

@@ -10,6 +10,8 @@ public class ZoneDetails implements Serializable {
     private String zoneName;
     private String section;
 
+    public ZoneDetails(){}
+
     public ZoneDetails(int zoneId, int beaconId, String zoneName, String section) {
         this.zoneId = zoneId;
         this.beaconId = beaconId;

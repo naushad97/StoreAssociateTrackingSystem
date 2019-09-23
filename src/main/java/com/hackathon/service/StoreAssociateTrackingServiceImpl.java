@@ -91,8 +91,10 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
         List<AssociateAccountDetails> associateAccounts = null;
         try {
             InputStream objectStream = getInputStreamFromS3("static/associateAccounts.json");
-            associateAccounts = objectMapper.readValue(objectStream, new TypeReference<List<AssociateAccountDetails>>(){});
-            objectStream.close();
+            if(objectStream != null){
+                associateAccounts = objectMapper.readValue(objectStream, new TypeReference<List<AssociateAccountDetails>>(){});
+                objectStream.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,8 +108,10 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
         List<ZoneDetails> zoneDetails = null;
         try {
             InputStream objectStream = getInputStreamFromS3("static/zoneDetails.json");
-            zoneDetails = objectMapper.readValue(objectStream, new TypeReference<List<ZoneDetails>>(){});
-            objectStream.close();
+            if(objectStream != null){
+                zoneDetails = objectMapper.readValue(objectStream, new TypeReference<List<ZoneDetails>>(){});
+                objectStream.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,9 +124,12 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
     public List<BeaconDetails> getBeaconDetails() {
         List<BeaconDetails> beaconDetails = null;
         try {
+
             InputStream objectStream = getInputStreamFromS3("static/beaconDetails.json");
-            beaconDetails = objectMapper.readValue(objectStream, new TypeReference<List<BeaconDetails>>(){});
-            objectStream.close();
+            if(objectStream != null){
+                beaconDetails = objectMapper.readValue(objectStream, new TypeReference<List<BeaconDetails>>(){});
+                objectStream.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,11 +139,17 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
     }
 
     private InputStream getInputStreamFromS3(String s) {
-        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
-                .build();
-        S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
-        return object.getObjectContent();
+        try {
+            AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+                    .build();
+            S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
+            return object.getObjectContent();
+        } catch (Exception e){
+
+        }
+
+        return null;
     }
 
 }

@@ -10,6 +10,8 @@ public class BeaconDetails implements Serializable {
     private String uuid;
     private String make;
 
+    public BeaconDetails() {}
+
     public BeaconDetails(int beaconId, String name, String uid, String make) {
         this.beaconId = beaconId;
         this.name = name;
