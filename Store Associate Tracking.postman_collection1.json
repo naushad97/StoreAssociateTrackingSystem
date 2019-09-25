@@ -1,0 +1,200 @@
+{
+	"id": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+	"name": "Store Associate Tracking",
+	"description": "",
+	"order": [
+		"d9cb3bf5-afeb-238d-9dc7-46ad112fb03a",
+		"2ed49605-d718-a2f3-137b-20d1d5ba95f4",
+		"2eec2f67-2fbc-00b6-6ee8-091d9e5cd775",
+		"382ce902-3f9c-3727-8c22-664b7daac506",
+		"26bb61ce-9535-2c3b-87dc-dc00fad7eec5",
+		"ee1fde44-386c-29c8-3c89-5c7d4b23a40a"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 0,
+	"owner": "3283784",
+	"public": false,
+	"requests": [
+		{
+			"id": "26bb61ce-9535-2c3b-87dc-dc00fad7eec5",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/saveBeaconData",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569440904582,
+			"name": "Save Beacon Data 3",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID3\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:58 AM\",\r\n  \"scanTimeInMillis\" : 1568871997261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID5\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		},
+		{
+			"id": "2ed49605-d718-a2f3-137b-20d1d5ba95f4",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/getAllAssociateTrackingData",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569184680471,
+			"name": "Track associate current position copy",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID1\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:18 AM\",\r\n  \"scanTimeInMillis\" : 1568872068261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID1\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		},
+		{
+			"id": "2eec2f67-2fbc-00b6-6ee8-091d9e5cd775",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/saveBeaconData",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569440799294,
+			"name": "Save Beacon Data",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID3\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:58 AM\",\r\n  \"scanTimeInMillis\" : 1568871957261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID5\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		},
+		{
+			"id": "382ce902-3f9c-3727-8c22-664b7daac506",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/saveBeaconData",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569440847670,
+			"name": "Save Beacon Data 2",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID3\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:58 AM\",\r\n  \"scanTimeInMillis\" : 1568871977261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID5\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		},
+		{
+			"id": "d9cb3bf5-afeb-238d-9dc7-46ad112fb03a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/getAllAssociateLocation",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569440763101,
+			"name": "Beacon Integration copy",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID1\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:18 AM\",\r\n  \"scanTimeInMillis\" : 1568872068261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID1\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		},
+		{
+			"id": "ee1fde44-386c-29c8-3c89-5c7d4b23a40a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{baseUrl}}/storeAssociateTracking/saveBeaconData",
+			"folder": null,
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1569440973582,
+			"name": "Save Beacon Data with Other User",
+			"description": null,
+			"collectionId": "f64a59ca-9b88-aa07-3f4b-83462860b610",
+			"responses": [],
+			"rawModeData": "{\r\n  \"major\" : 16808,\r\n  \"minor\" : 19400,\r\n  \"power\" : -59,\r\n  \"rssi\" : -26,\r\n  \"proximityUUID\" : \"UID3\",\r\n  \"distanceUnit\" : \"meters\",\r\n  \"distance\" : 0.01,\r\n  \"proximity\" : \"IMMEDIATE\",\r\n  \"scanDateTimeStamp\" : \"Sep 19, 2019 11:14:58 AM\",\r\n  \"scanTimeInMillis\" : 1568871997261,\r\n  \"handshakeTimeInNano\" : 409852674198,\r\n  \"userId\" : \"ASID1\",\r\n  \"type\" : \"iBeacon\"\r\n}"
+		}
+	]
+}
