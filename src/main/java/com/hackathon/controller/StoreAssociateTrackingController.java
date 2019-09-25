@@ -18,76 +18,87 @@ import java.util.logging.Logger;
 @RequestMapping(value = "/storeAssociateTracking")
 public class StoreAssociateTrackingController {
 
-    private static Logger logger = Logger.getLogger(StoreAssociateTrackingController.class.getName());
+	private static Logger logger = Logger.getLogger(StoreAssociateTrackingController.class.getName());
 
-    @Autowired
-    StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
+	@Autowired
+	StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/doLogin")
-    AssociateLogin doLogin(@RequestBody AssociateAccountDetails associateAccount) {
+	@RequestMapping(method = RequestMethod.POST, value = "/doLogin")
+	AssociateLogin doLogin(@RequestBody AssociateAccountDetails associateAccount) {
 
-        logger.info("ReqData="+associateAccount.toString());
+		logger.info("ReqData=" + associateAccount.toString());
 
-        storeDataIntoMemory();
+		storeDataIntoMemory();
 
-        return storeAssociateTrackingServiceImpl.doLogin(associateAccount);
-    }
+		return storeAssociateTrackingServiceImpl.doLogin(associateAccount);
+	}
 
-    @RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
-    TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
+	@RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
+	TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
 
-        storeDataIntoMemory();
+		storeDataIntoMemory();
 
-        System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
+		System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
 
-        TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl.trackLocationByTime(trackLocationByTimeReq);
+		TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl
+				.trackLocationByTime(trackLocationByTimeReq);
 
-        if (trackLocationByTimeRsp.isSuccessfull()) {
-            System.out.println("Sucessfully done");
-        } else {
-            System.out.println("Failed");
-        }
+		if (trackLocationByTimeRsp.isSuccessfull()) {
+			System.out.println("Sucessfully done");
+		} else {
+			System.out.println("Failed");
+		}
 
-        return trackLocationByTimeRsp;
-    }
+		return trackLocationByTimeRsp;
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
-    LocationOfAssociateRsp getAllLocationOfAssociate() {
+	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
+	LocationOfAssociateRsp getAllLocationOfAssociate() {
 
-        storeDataIntoMemory();
+		storeDataIntoMemory();
 
-        LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
+		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
 
-        return locationOfAssociateRsp;
-    }
+		return locationOfAssociateRsp;
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateTrackingData")
-    Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
+	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateTrackingData")
+	Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
 
-        storeDataIntoMemory();
+		storeDataIntoMemory();
 
-        return storeAssociateTrackingServiceImpl.getAllAssociateTrackingData();
-    }
+		return storeAssociateTrackingServiceImpl.getAllAssociateTrackingData();
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getAssociateDetails")
-    List<AssociateAccountDetails> getAssociateAccounts() {
-        return storeAssociateTrackingServiceImpl.getAssociateAccounts();
-    }
+	@RequestMapping(method = RequestMethod.GET, value = "/getAssociateDetails")
+	List<AssociateAccountDetails> getAssociateAccounts() {
+		return storeAssociateTrackingServiceImpl.getAssociateAccounts();
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getBeaconDetails")
-    List<BeaconDetails> getBeaconDetails() {
-        return storeAssociateTrackingServiceImpl.getBeaconDetails();
-    }
+	@RequestMapping(method = RequestMethod.GET, value = "/getBeaconDetails")
+	List<BeaconDetails> getBeaconDetails() {
+		return storeAssociateTrackingServiceImpl.getBeaconDetails();
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getZoneDetails")
-    List<ZoneDetails> getZoneDetails() {
-        return storeAssociateTrackingServiceImpl.getZoneDetails();
-    }
+	@RequestMapping(method = RequestMethod.GET, value = "/getZoneDetails")
+	List<ZoneDetails> getZoneDetails() {
+		return storeAssociateTrackingServiceImpl.getZoneDetails();
+	}
 
-    private void storeDataIntoMemory(){
-        getAssociateAccounts();
-        getBeaconDetails();
-        getZoneDetails();
-    }
+	@PostMapping("/notification")
+	public void sendNotification(@RequestBody final AssociateRelocationRQ associateRelocationRQ) {
+		storeAssociateTrackingServiceImpl.sendNotification(associateRelocationRQ);
+	}
+
+	@PostMapping("/register")
+	public void registerMobileRegistrationId(@RequestBody final DeviceRegistrationReq deviceRegistrationReq) {
+		storeAssociateTrackingServiceImpl.registerMobileRegistrationId(deviceRegistrationReq);
+	}
+
+	private void storeDataIntoMemory() {
+		getAssociateAccounts();
+		getBeaconDetails();
+		getZoneDetails();
+	}
 
 }

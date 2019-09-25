@@ -16,7 +16,7 @@ public interface StoreAssociateTrackingService {
 	TrackLocationByTimeRsp trackLocationByTime(TrackLocationByTimeReq trackLocationByTimeReq);
 
 	LocationOfAssociateRsp getAllLocationOfAssociate();
-	
+
 	Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData();
 
 	List<AssociateAccountDetails> getAssociateAccounts();
@@ -24,5 +24,9 @@ public interface StoreAssociateTrackingService {
 	List<BeaconDetails> getBeaconDetails();
 
 	List<ZoneDetails> getZoneDetails();
+
+	void sendNotification(AssociateRelocationRQ associateId);
+
+	void registerMobileRegistrationId(DeviceRegistrationReq associateReq);
 
 }
