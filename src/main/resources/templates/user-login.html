@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Store Manager Login</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="all,follow" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700" />
+		<link rel="stylesheet" th:href="@{../webjars/bootstrap/4.3.1/css/bootstrap.min.css}"/>
+		<link rel="stylesheet" th:href="@{../webjars/font-awesome/4.7.0/css/font-awesome.min.css}"/>	
+		<link rel="stylesheet" th:href="@{/css/font.css}"/>		
+		<link rel="stylesheet" th:href="@{/css/style.default.css}" id="theme-stylesheet"/>		
+        <link rel="stylesheet" th:href="@{/css/custom.css}"/>
+		<link rel="shortcut icon" th:href="@{/img/favicon.ico}" />
+	</head>
+	<body>
+		<header class="header">
+			<nav class="navbar navbar-expand-lg">
+				<div
+				class="container-fluid d-flex align-items-center justify-content-between">
+					<div class="navbar-header">
+						<a href="index.html" class="navbar-brand">
+							<div class="brand-text brand-big visible text-uppercase">
+								<strong class="text-primary"> Store Associate </strong>
+								<strong>Tracking System</strong>
+							</div>
+							<div class="brand-text brand-sm">
+								<strong class="text-primary">Store Associate Tracking
+								System</strong>
+								<strong></strong>
+							</div>
+						</a>
+						<button class="sidebar-toggle">
+							<i class="fa fa-long-arrow-left"></i>
+						</button>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<div class="d-flex align-items-stretch">
+			<div class="page-content login-content">
+				<div class="login-page-header">
+					<div class="container-fluid">
+						<h2 class="h5 no-margin-bottom">Login</h2>
+					</div>
+				</div>
+				<section class="no-padding-top">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-lg-6 login-container">
+								<div class="block">
+									<div class="title">
+										<!-- <strong class="d-block">Login</strong> -->
+										<!-- <span class="d-block">Login section for Store Manager</span> -->
+									</div>
+									<div class="block-body">
+										<form action="#" th:action="@{/associateWebTracking/doWebLogin}" th:object="${associateAccountDetails}"
+										method="post">
+											<div class="form-group">
+												<label class="form-control-label">Associate ID</label>
+												<input type="text" placeholder="Enter ID" class="form-control" id="fullname" th:field="*{appSId}" />
+												<span th:if="${#fields.hasErrors('appSId')}" th:errors="*{appSId}" style="color:red"></span>
+											</div>
+											<div class="form-group">
+												<label class="form-control-label">Password</label>
+												<input type="text" placeholder="Enter password" class="form-control" id="productsku" th:field="*{userPw}"/>
+												<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"  style="color:red"></span>
+											</div>
+											
+											<div class="form-group">
+											    <div th:text="${associateAccountDetails.message}"></div>
+												<input type="submit" value="Login" class="btn btn-primary" id="loginBtn" />
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<footer class="footer">
+					<div class="footer__block block no-margin-bottom">
+						<div class="container-fluid text-center">
+							<!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+							<p class="no-margin-bottom">2019 &copy; Store Associate
+							Tracking System</p>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script th:src="@{../webjars/jquery/3.4.1/jquery.min.js}"></script>
+		<script th:src="@{../webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+		<script th:src="@{../webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
+		<script src="../js/front.js"></script>
+		<script src="../js/custom.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+	</body>
+</html>

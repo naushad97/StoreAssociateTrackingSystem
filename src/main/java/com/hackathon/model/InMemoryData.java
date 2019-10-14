@@ -19,7 +19,10 @@ public class InMemoryData {
         if(accountDetails == null){
             logger.info("Getting static Data");
             AssociateDetailsEnum associate = AssociateDetailsEnum.findAssociateByASID(appSID);
-            return new AssociateAccountDetails(associate.getAssociateId(), associate.getName(), associate.getAsid(), associate.getUserId(), associate.getUserPw(), associate.getRollId());
+            if(associate != null) {
+            	return new AssociateAccountDetails(associate.getAssociateId(), associate.getName(), associate.getAsid(), associate.getUserId(), associate.getUserPw(), associate.getRoleId());
+            }
+            return new AssociateAccountDetails(0, "Account Not found");
         }
 
         logger.info("InMemoryData="+accountDetails.toString());
@@ -33,7 +36,10 @@ public class InMemoryData {
         if(accountDetails == null){
             logger.info("Getting static Data");
             AssociateDetailsEnum associate = AssociateDetailsEnum.findAssociateByAssociateId(id);
-            return new AssociateAccountDetails(associate.getAssociateId(), associate.getName(), associate.getAsid(), associate.getUserId(), associate.getUserPw(), associate.getRollId());
+            if(associate != null) {
+            	return new AssociateAccountDetails(associate.getAssociateId(), associate.getName(), associate.getAsid(), associate.getUserId(), associate.getUserPw(), associate.getRoleId());
+            }
+            return new AssociateAccountDetails(0, "Account Not found");
         }
 
         logger.info("Getting s3 Data");

@@ -1,10 +1,5 @@
 package com.hackathon.service;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.config.AppProperties;
@@ -22,13 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import javax.annotation.Resource;
 
 @Component
 public class StoreAssociateTrackingServiceImpl implements StoreAssociateTrackingService {
@@ -61,12 +55,28 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 			logger.info("FilteredResult=" + accountFound.toString());
 			if (accountFound.getUserPw().equalsIgnoreCase(associateAccountDetails.getUserPw())) {
 				return new AssociateLogin(accountFound.getAssociateId(), accountFound.getName(),
-						accountFound.getAppSId(), accountFound.getUserId(), accountFound.getRollId(), 1,
+						accountFound.getAppSId(), accountFound.getUserId(), accountFound.getRoleId(), 1,
 						"Logged In Successfully");
 			}
 		}
 
 		return new AssociateLogin(0, "Login failed");
+	}
+	
+	@Override
+	public AssociateAccountDetails userLogin(AssociateAccountDetails associateAccountDetails) {
+		AssociateAccountDetails accountFound = InMemoryData.findAssociateByAppSID(associateAccountDetails.getAppSId());
+
+		if (accountFound != null && accountFound.getStatus() == 1) {
+			logger.info("FilteredResult=" + accountFound.toString());
+			if (accountFound.getUserPw().equalsIgnoreCase(associateAccountDetails.getUserPw())) {
+				accountFound.setStatus(1);
+				accountFound.setMessage("Logged In Successfully");
+				return accountFound;
+			}
+		}
+
+		return new AssociateAccountDetails(0, "Login failed");
 	}
 
 	@Override
@@ -91,18 +101,37 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 	public LocationOfAssociateRsp getAllLocationOfAssociate() {
 		LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
 
-		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl
-				.getAllLocationOfAssociate();
+		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl.getAllLocationOfAssociate();
 
 		locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
 
 		return locationOfAssociateRsp;
 	}
+	
+	@Override
+	public LocationOfAssociateRsp getAllLocationOfAssociate(String zoneId) {
+		LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
+
+		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl.getAllLocationOfAssociate(zoneId);
+
+		locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
+
+		return locationOfAssociateRsp;
+	}
+	
+	
 
 	@Override
 	public Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
 
 		return locationAllocationEnumDataProcessImpl.getAllAssociateTrackingData();
+	}
+	
+	@Override
+	public void loadAWSDataIntoMemory() {
+		getAssociateAccounts();
+		getZoneDetails();
+		getBeaconDetails();
 	}
 
 	@Override
@@ -139,6 +168,10 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 		}
 
 		InMemoryData.zoneDetails = zoneDetails;
+		
+		if(InMemoryData.zoneDetails == null) {
+			return ZoneDetailsEnum.getAllZoneDetails();
+		}
 		return zoneDetails;
 	}
 
@@ -158,11 +191,15 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 		}
 
 		InMemoryData.beaconDetails = beaconDetails;
+		
+		if(InMemoryData.beaconDetails == null) {
+			
+		}
 		return beaconDetails;
 	}
 
 	private InputStream getInputStreamFromS3(String s) {
-		try {
+		/*try {
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
 					.withCredentials(DefaultAWSCredentialsProviderChain.getInstance()).build();
 			S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
@@ -170,7 +207,7 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 		} catch (Exception e) {
 
 		}
-
+*/
 		return null;
 	}
 

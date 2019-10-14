@@ -12,6 +12,7 @@ import com.hackathon.model.ZoneDetails;
 public interface StoreAssociateTrackingService {
 
 	AssociateLogin doLogin(AssociateAccountDetails associateAccountDetails);
+	AssociateAccountDetails userLogin(AssociateAccountDetails associateAccountDetails);
 
 	TrackLocationByTimeRsp trackLocationByTime(TrackLocationByTimeReq trackLocationByTimeReq);
 
@@ -24,9 +25,12 @@ public interface StoreAssociateTrackingService {
 	List<BeaconDetails> getBeaconDetails();
 
 	List<ZoneDetails> getZoneDetails();
+	
+	void loadAWSDataIntoMemory();
 
 	void sendNotification(AssociateRelocationRQ associateId);
 
 	void registerMobileRegistrationId(DeviceRegistrationReq associateReq);
+	LocationOfAssociateRsp getAllLocationOfAssociate(String zoneId);
 
 }

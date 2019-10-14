@@ -3,24 +3,39 @@ package com.hackathon.model;
 import java.io.Serializable;
 import java.util.StringJoiner;
 
-public class AssociateAccountDetails implements Serializable {
+import javax.validation.constraints.NotBlank;
 
-    private int associateId;
+import com.hackathon.dto.BaseRsp;
+
+public class AssociateAccountDetails extends BaseRsp implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private int associateId;
     private String name;
+    
+    @NotBlank
     private String appSId;
     private String userId;
+    
+    @NotBlank
     private String userPw;
-    private int rollId;
+    private int roleId;
 
     public AssociateAccountDetails(){}
+    
+    public AssociateAccountDetails(int status, String message) {
+        super(status, message);
+    }
 
-    public AssociateAccountDetails(int associateId, String name, String asid, String userId, String userPw, int rollId) {
+    public AssociateAccountDetails(int associateId, String name, String asid, String userId, String userPw, int roleId) {
+    	super(1, "Accound Found");
+    	
         this.associateId = associateId;
         this.name = name;
         this.appSId = asid;
         this.userId = userId;
         this.userPw = userPw;
-        this.rollId = rollId;
+        this.roleId = roleId;
     }
 
     public int getAssociateId() {
@@ -63,12 +78,12 @@ public class AssociateAccountDetails implements Serializable {
         this.userPw = userPw;
     }
 
-    public int getRollId() {
-        return rollId;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRollId(int rollId) {
-        this.rollId = rollId;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     @Override
@@ -79,7 +94,7 @@ public class AssociateAccountDetails implements Serializable {
                 .add("asid='" + appSId + "'")
                 .add("userId='" + userId + "'")
                 .add("userPw='" + userPw + "'")
-                .add("rollId='" + rollId + "'")
+                .add("roleId='" + roleId + "'")
                 .toString();
     }
 }

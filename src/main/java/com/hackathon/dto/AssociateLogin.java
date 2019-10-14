@@ -3,12 +3,12 @@ package com.hackathon.dto;
 import java.io.Serializable;
 
 public class AssociateLogin extends BaseRsp implements Serializable {
-
-    private int associateId;
+	private static final long serialVersionUID = 1L;
+	private int associateId;
     private String name;
     private String appSId;
     private String userId;
-    private int rollId;
+    private int roleId;
 
     public AssociateLogin(){}
 
@@ -16,13 +16,13 @@ public class AssociateLogin extends BaseRsp implements Serializable {
         super(status, message);
     }
 
-    public AssociateLogin(int associateId, String name, String appSId, String userId, int rollId, int status, String message) {
+    public AssociateLogin(int associateId, String name, String appSId, String userId, int roleId, int status, String message) {
         super(status, message);
         this.associateId = associateId;
         this.name = name;
         this.appSId = appSId;
         this.userId = userId;
-        this.rollId = rollId;
+        this.roleId = roleId;
     }
 
     public int getAssociateId() {
@@ -57,11 +57,11 @@ public class AssociateLogin extends BaseRsp implements Serializable {
         this.userId = userId;
     }
 
-    public int getRollId() {
-        return rollId;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRollId(int rollId) {
-        this.rollId = rollId;
+    public void setRoleId(int rollId) {
+        this.roleId = rollId;
     }
 }

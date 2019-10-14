@@ -6,6 +6,7 @@ public class LocationAndAssociateDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String zoneName;
+	private String zoneId;
 	private String biconName;
 	private String sectionName;
 	private long time;
@@ -32,7 +33,14 @@ public class LocationAndAssociateDetails implements Serializable {
 	public void setZoneName(String zoneName) {
 		this.zoneName = zoneName;
 	}
+	
+	public String getZoneId() {
+		return zoneId;
+	}
 
+	public void setZoneId(String zoneId) {
+		this.zoneId = zoneId;
+	}
 	public String getBiconName() {
 		return biconName;
 	}

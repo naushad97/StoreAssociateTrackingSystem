@@ -1,9 +1,6 @@
 package com.hackathon.enums;
 
-import com.hackathon.model.BeaconDetails;
-
 import java.util.Arrays;
-import java.util.List;
 
 public enum BeaconDetailsEnum {
 

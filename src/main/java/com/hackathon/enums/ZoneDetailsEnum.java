@@ -1,18 +1,18 @@
 package com.hackathon.enums;
 
-import com.hackathon.model.BeaconDetails;
-import com.hackathon.model.ZoneDetails;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hackathon.model.ZoneDetails;
+
 public enum ZoneDetailsEnum {
 
-	ZONE1(1, "Z1", 1, "Sec1"), //
-	ZONE2(2, "Z2", 2, "Sec2"), //
-	ZONE3(3, "Z3", 3, "Sec3"), //
-	ZONE4(4, "Z4", 4, "Sec4"), //
-	ZONE5(5, "Z5", 5, "Sec5");
+	ZONE1(1, "Grocery", 1, "Sec1"), //
+	ZONE2(2, "Clothings", 2, "Sec2"), //
+	ZONE3(3, "Electronics", 3, "Sec3"), //
+	ZONE4(4, "Cosmetics", 4, "Sec4"), //
+	ZONE5(5, "Furniture", 5, "Sec5");
 
 	private int zoneId;
 	private String zoneName;
@@ -57,6 +57,14 @@ public enum ZoneDetailsEnum {
 		return Arrays.stream(ZoneDetailsEnum.values())
 				.filter(obj -> String.valueOf(obj.getZoneId()).equalsIgnoreCase(zone))
 				.findFirst().orElse(null);
+	}
+	
+	public static List<ZoneDetails>  getAllZoneDetails(){
+		List<ZoneDetails> zoneDetails = new ArrayList<ZoneDetails>();
+		for(ZoneDetailsEnum zoneDetailsEnum : ZoneDetailsEnum.values()) {
+			zoneDetails.add(new ZoneDetails(zoneDetailsEnum.getZoneId(), zoneDetailsEnum.getBeaconId(), zoneDetailsEnum.getZoneName(), zoneDetailsEnum.getSection()));
+		}
+		return zoneDetails;
 	}
 
 

@@ -1,17 +1,29 @@
 package com.hackathon.controller;
 
-import com.hackathon.dto.*;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hackathon.dto.AssociateLogin;
+import com.hackathon.dto.AssociateRelocationRQ;
+import com.hackathon.dto.DeviceRegistrationReq;
+import com.hackathon.dto.LocationOfAssociateRsp;
+import com.hackathon.dto.TrackLocationByTimeReq;
+import com.hackathon.dto.TrackLocationByTimeRsp;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
 import com.hackathon.model.BeaconDetails;
 import com.hackathon.model.ZoneDetails;
 import com.hackathon.service.StoreAssociateTrackingService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin
@@ -21,14 +33,13 @@ public class StoreAssociateTrackingController {
 	private static Logger logger = Logger.getLogger(StoreAssociateTrackingController.class.getName());
 
 	@Autowired
-	StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
+	private StoreAssociateTrackingService storeAssociateTrackingServiceImpl;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/doLogin")
 	AssociateLogin doLogin(@RequestBody AssociateAccountDetails associateAccount) {
 
 		logger.info("ReqData=" + associateAccount.toString());
-
-		storeDataIntoMemory();
+		loadAWSDataIntoMemory();
 
 		return storeAssociateTrackingServiceImpl.doLogin(associateAccount);
 	}
@@ -36,8 +47,7 @@ public class StoreAssociateTrackingController {
 	@RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
 	TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
 
-		storeDataIntoMemory();
-
+		loadAWSDataIntoMemory();
 		System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
 
 		TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl
@@ -51,21 +61,45 @@ public class StoreAssociateTrackingController {
 
 		return trackLocationByTimeRsp;
 	}
+	
+	
 
+	/**
+	 * TO get real-time data in all zone in 30 last sec
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
 	LocationOfAssociateRsp getAllLocationOfAssociate() {
-
-		storeDataIntoMemory();
+ 
+		loadAWSDataIntoMemory();
 
 		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
 
 		return locationOfAssociateRsp;
 	}
+	
+	/**
+	 * TO get real-time data in a particular zone in 30 last sec
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation/{zoneId}")
+	LocationOfAssociateRsp getAllLocationOfAssociate(@PathVariable String zoneId) {
+ 
+		loadAWSDataIntoMemory();
 
+		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate(zoneId);
+
+		return locationOfAssociateRsp;
+	}
+
+	/**
+	 * Get analytics data in through out day
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateTrackingData")
 	Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
 
-		storeDataIntoMemory();
+		loadAWSDataIntoMemory();
 
 		return storeAssociateTrackingServiceImpl.getAllAssociateTrackingData();
 	}
@@ -95,7 +129,7 @@ public class StoreAssociateTrackingController {
 		storeAssociateTrackingServiceImpl.registerMobileRegistrationId(deviceRegistrationReq);
 	}
 
-	private void storeDataIntoMemory() {
+	private void loadAWSDataIntoMemory() {
 		getAssociateAccounts();
 		getBeaconDetails();
 		getZoneDetails();

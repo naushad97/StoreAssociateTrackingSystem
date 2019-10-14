@@ -15,15 +15,15 @@ public enum AssociateDetailsEnum {
 	private String asid;
 	private String userId;
 	private String userPw;
-	private int rollId;
+	private int roleId;
 
-	private AssociateDetailsEnum(int associateId, String name, String asid, String userId, String userPw, int rollID) {
+	private AssociateDetailsEnum(int associateId, String name, String asid, String userId, String userPw, int roleId) {
 		this.associateId = associateId;
 		this.name = name;
 		this.asid = asid;
 		this.userId = userId;
 		this.userPw = userPw;
-		this.rollId = rollID;
+		this.roleId = roleId;
 	}
 
 	public int getAssociateId() {
@@ -54,12 +54,12 @@ public enum AssociateDetailsEnum {
 		this.userPw = userPw;
 	}
 
-	public int getRollId() {
-		return rollId;
+	public int getRoleId() {
+		return roleId;
 	}
 
-	public void setRollId(int rollId) {
-		this.rollId = rollId;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 
 	public static boolean checkByASID(String asid) {

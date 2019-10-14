@@ -5,10 +5,12 @@ import java.util.StringJoiner;
 
 public class ZoneDetails implements Serializable {
 
-    private int zoneId;
+	private static final long serialVersionUID = 1L;
+	private int zoneId;
     private int beaconId;
     private String zoneName;
     private String section;
+    private int associateCount;
 
     public ZoneDetails(){}
 
@@ -50,7 +52,15 @@ public class ZoneDetails implements Serializable {
     public void setSection(String section) {
         this.section = section;
     }
+    
+    public int getAssociateCount() {
+		return associateCount;
+	}
 
+    public void setAssociateCount(int associateCount) {
+		this.associateCount = associateCount;
+	}
+    
     @Override
     public String toString() {
         return new StringJoiner(", ", ZoneDetails.class.getSimpleName() + "[", "]")
@@ -58,6 +68,7 @@ public class ZoneDetails implements Serializable {
                 .add("zoneName='" + zoneName + "'")
                 .add("beaconId='" + beaconId + "'")
                 .add("section='" + section + "'")
+                .add("associateCount='" + associateCount + "'")
                 .toString();
     }
 }

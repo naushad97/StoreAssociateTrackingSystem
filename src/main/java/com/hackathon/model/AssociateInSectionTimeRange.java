@@ -10,6 +10,9 @@ public class AssociateInSectionTimeRange {
 	private String dateOfAction;
 	private String biconID;
 	private String biconName;
+	private String empId;
+	private String empName;
+	private String userId;
 
 	public String getEntryTime() {
 		return entryTime;
@@ -75,10 +78,42 @@ public class AssociateInSectionTimeRange {
 		this.biconName = biconName;
 	}
 
+	public String getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(String empId) {
+		this.empId = empId;
+	}
+
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	@Override
 	public String toString() {
-		return "AssociateInSectionTimeRange [entryTime=" + entryTime + ", exitTime=" + exitTime + ", zone=" + zone
-				+ ", section=" + section + ", timeDiff=" + timeSpent + ", dateOfAction=" + dateOfAction + ", biconID="
-				+ biconID + ", biconName=" + biconName + "]";
+		return "AssociateInSectionTimeRange [entryTime=" + entryTime + ","
+				+ " exitTime=" + exitTime + ", "
+				+ "zone=" + zone 
+				+ ", section=" + section
+				+ ", timeDiff=" + timeSpent 
+				+ ", dateOfAction=" + dateOfAction 
+				+ ", biconID="+ biconID 
+				+ ", userId=" + userId 
+				+", biconName=" + biconName 
+				+ "]";
 	}
+
 }

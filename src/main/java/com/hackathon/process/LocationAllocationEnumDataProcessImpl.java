@@ -107,14 +107,31 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 
 		return locationAndAssociateDetailsList;
 	}
+	
+	public List<LocationAndAssociateDetails> getAllLocationOfAssociate(String zoneId) {
+		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = new ArrayList<LocationAndAssociateDetails>();
+		associateLocationMap.forEach((k, v) -> {
+			if (((System.currentTimeMillis() - v) / 1000) < appProperties.getInterval() && k.getZone().getZoneId() == Integer.parseInt(zoneId) ) {
+				LocationAndAssociateDetails locationAndAssociateDetails = new LocationAndAssociateDetails();
+				locationAndAssociateDetails.setTime(v);
+				processBeaconZoneAndAssociate(locationAndAssociateDetails, k);
+				locationAndAssociateDetailsList.add(locationAndAssociateDetails);
+			}
+		});
+
+		return locationAndAssociateDetailsList;
+	}
 
 	public Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
 		final Map<String, List<AssociateInSectionTimeRange>> associateTracker = new HashMap<>();
 		associateTrackermap.forEach((k, v) -> {
 			AssociateDetailsEnum associateDetailsEnum = AssociateDetailsEnum
 					.findAssociateByAssociateId(k.getAssociateId());
-			String keyVal = associateDetailsEnum.getAssociateId() + ":" + associateDetailsEnum.getName() + ":"
-					+ associateDetailsEnum.getAsid();
+			/*
+			 * String keyVal = associateDetailsEnum.getAssociateId() + ":" +
+			 * associateDetailsEnum.getName() + ":" + associateDetailsEnum.getAsid();
+			 */
+			String keyVal = String.valueOf(associateDetailsEnum.getAssociateId());
 			associateTracker.put(keyVal, associateTrackermap.get(k));
 		});
 
@@ -139,6 +156,7 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 			if (beaconAssociateLocation.getZone() != null) {
 				locationAndAssociateDetails.setZoneName(beaconAssociateLocation.getZone().getZoneName());
 				locationAndAssociateDetails.setSectionName(beaconAssociateLocation.getZone().getSection());
+				locationAndAssociateDetails.setZoneId(String.valueOf(beaconAssociateLocation.getZone().getZoneId()));
 			}
 
 			locationAndAssociateDetails.setDistance(beaconAssociateLocation.getDistance());
@@ -175,6 +193,9 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 			associateInSectionTimeRange.setBiconID(beaconDetail.getUuid());
 			associateInSectionTimeRange.setBiconName(beaconDetail.getName());
 			associateInSectionTimeRange.setDateOfAction(dateTime);
+			associateInSectionTimeRange.setEmpName(associateAccountDetails.getName());
+			associateInSectionTimeRange.setEmpId(String.valueOf(associateAccountDetails.getAssociateId()));
+			associateInSectionTimeRange.setUserId(String.valueOf(associateAccountDetails.getUserId()));
 			final List<AssociateInSectionTimeRange> trackerList = new ArrayList<>();
 			trackerList.add(associateInSectionTimeRange);
 			trackerMap.put(requestAssociateSectionLocation, trackerList);
@@ -202,6 +223,9 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 				associateInSectionTimeRange.setBiconID(beaconDetail.getUuid());
 				associateInSectionTimeRange.setBiconName(beaconDetail.getName());
 				associateInSectionTimeRange.setDateOfAction(dateTime);
+				associateInSectionTimeRange.setEmpName(associateAccountDetails.getName());
+				associateInSectionTimeRange.setEmpId(String.valueOf(associateAccountDetails.getAssociateId()));
+				associateInSectionTimeRange.setUserId(String.valueOf(associateAccountDetails.getUserId()));
 				final List<AssociateInSectionTimeRange> trackerList = new ArrayList<>();
 				trackerList.add(associateInSectionTimeRange);
 				trackerMap.get(requestAssociateSectionLocation).add(associateInSectionTimeRange);

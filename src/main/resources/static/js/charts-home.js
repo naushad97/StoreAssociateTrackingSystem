@@ -447,7 +447,7 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Pie Chart 3
     // ------------------------------------------------------ //
-    var PIECHART = $('#pieChartHome3');
+    var PIECHART = $('#visitPieChart1');
     var myPieChart = new Chart(PIECHART, {
         type: 'doughnut',
         options: {
@@ -499,5 +499,129 @@ $(document).ready(function () {
     var pieChartExample = {
         responsive: true
     };
+    
+   
+    //var b = $("#visitPieChart");
+    //drawPieChart();
+    
+    var PIECHART = $("#visitPieChart");
+ 	 $.ajax({
+ 	        url: "/storeAssociateTracking/getZoneDetails",
+ 	        success: function(a) {
+ 	            //$("#instancesHTML").html('<strong class="d-block dashtext-1">' + a.total + '</strong><span class="d-block">' + a.month + '</span><small class="d-block"><div>' + a.count + " Instances</div></small>");
+ 	            //var b = $("#visitPieChart");
+ 	            //var b = document.getElementById('#visitPieChart').getContext('2d');
+ 	        	
+ 	        	var labels = [];
+ 	        	var data = [];
+
+ 	        	a.forEach(function(entry) {
+ 	        	  labels.push(entry.zoneName);
+ 	        	  data.push(entry.associateCount);
+ 	        	});
+ 	        	
+ 	        	var myPieChart = new Chart(PIECHART, {
+ 	              type: 'doughnut',
+ 	              options: {
+ 	                  cutoutPercentage: 90,
+ 	                  legend: {
+ 	                      display: false
+ 	                  }
+ 	              },
+ 	              data: {
+ 	                  labels: labels,
+ 	                  datasets: [
+ 	                      {
+ 	                          data: data,
+ 	                          borderWidth: [0, 0, 0, 0, 0],
+ 	                          backgroundColor: [
+ 	                              '#da4d60',
+ 	                              "#e96577",
+ 	                              "#f28695",
+ 	                              "#ffb6c1"
+ 	                          ],
+ 	                          hoverBackgroundColor: [
+ 	                              '#da4d60',
+ 	                              "#e96577",
+ 	                              "#f28695",
+ 	                              "#ffb6c1"
+ 	                          ]
+ 	                      }]
+ 	              }
+ 	          });
+ 	        }
+ 	    });
+    
 
 });
+
+function drawPieChart(){
+	var PIECHART = $("#visitPieChart");
+  	 $.ajax({
+  	        url: "/storeAssociateTracking/getZoneDetails",
+  	        success: function(a) {
+  	            //$("#instancesHTML").html('<strong class="d-block dashtext-1">' + a.total + '</strong><span class="d-block">' + a.month + '</span><small class="d-block"><div>' + a.count + " Instances</div></small>");
+  	            //var b = $("#visitPieChart");
+  	            //var b = document.getElementById('#visitPieChart').getContext('2d');
+  	        	
+  	        	var labels1 = [];
+  	        	var data1 = [];
+
+  	        	a.forEach(function(entry) {
+  	        	  labels1.push(entry.zoneName);
+  	        	  data1.push(entry.associateCount);
+  	        	});
+  	        	
+  	        	var myPieChart = new Chart(PIECHART, {
+  	              type: 'doughnut',
+  	              options: {
+  	                  cutoutPercentage: 90,
+  	                  legend: {
+  	                      display: false
+  	                  }
+  	              },
+  	              data: {
+  	                  labels: labels1,
+  	                  datasets: [
+  	                      {
+  	                          data: data1,
+  	                          borderWidth: [0, 0, 0, 0, 0],
+  	                          backgroundColor: [
+  	                              '#da4d60',
+  	                              "#e96577",
+  	                              "#f28695",
+  	                              "#ffb6c1"
+  	                          ],
+  	                          hoverBackgroundColor: [
+  	                              '#da4d60',
+  	                              "#e96577",
+  	                              "#f28695",
+  	                              "#ffb6c1"
+  	                          ]
+  	                      }]
+  	              }
+  	          });
+
+  	        	
+  	        	
+  	        	
+  	           /* var c = new Chart(b, {
+  	                type: "pie",
+  	                options: {
+  	                    legend: {
+  	                        display: false
+  	                    }
+  	                },
+  	                data: {
+  	                    labels: a.zoneName,
+  	                    datasets: [ {
+  	                        data: a.associateCount,
+  	                        borderWidth: 0,
+  	                        backgroundColor: [ "#723ac3", "#864DD9", "#9762e6", "#a678eb", "#fff" ],
+  	                        hoverBackgroundColor: [ "#723ac3", "#864DD9", "#9762e6", "#a678eb", "#a678eb" ]
+  	                    } ]
+  	                }
+  	            });*/
+  	        }
+  	    });
+  }
