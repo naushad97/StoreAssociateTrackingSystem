@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 public enum AssociateDetailsEnum {
 
-	PRITHWISH(1, "Prithwish Ghosh", "ASID1", "pg", "123", 1), //
-	NAUSHAD(2, "MD Naushad Alam", "ASID2", "mna", "123", 2), //
-	MANDEEP(3, "Mandeep Ajmani", "ASID3", "ma", "123", 2), //
-	SUVADIP(4, "Suvadip Roy Chowdhury", "ASID4", "src", "123", 2), //
-	PRITHWIRAJ(5, "Prithwiraj Dey Sikder", "ASID5", "pds", "123", 2);
+	PRITHWISH(1, "Prithwish Ghosh", "ASID1", "pg", "12345", 1), //
+	NAUSHAD(2, "MD Naushad Alam", "ASID2", "mna", "12345", 2), //
+	MANDEEP(3, "Mandeep Ajmani", "ASID3", "ma", "12345", 2), //
+	SUVADIP(4, "Suvadip Roy Chowdhury", "ASID4", "src", "12345", 2), //
+	PRITHWIRAJ(5, "Prithwiraj Dey Sikder", "ASID5", "pds", "12345", 2);
 
 	private int associateId;
 	private String name;

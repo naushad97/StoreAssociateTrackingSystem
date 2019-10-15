@@ -59,6 +59,12 @@ public enum ZoneDetailsEnum {
 				.findFirst().orElse(null);
 	}
 	
+	public static ZoneDetailsEnum findZoneByZoneId(String zoneId) {
+		return Arrays.stream(ZoneDetailsEnum.values())
+				.filter(obj -> String.valueOf(obj.getZoneId()).equalsIgnoreCase(zoneId))
+				.findFirst().orElse(null);
+	}
+	
 	public static List<ZoneDetails>  getAllZoneDetails(){
 		List<ZoneDetails> zoneDetails = new ArrayList<ZoneDetails>();
 		for(ZoneDetailsEnum zoneDetailsEnum : ZoneDetailsEnum.values()) {

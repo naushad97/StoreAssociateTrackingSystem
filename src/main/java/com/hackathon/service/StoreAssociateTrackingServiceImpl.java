@@ -1,14 +1,13 @@
 package com.hackathon.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackathon.config.AppProperties;
-import com.hackathon.dto.*;
-import com.hackathon.enums.AssociateDetailsEnum;
-import com.hackathon.enums.ZoneDetailsEnum;
-import com.hackathon.model.*;
-import com.hackathon.process.LocationAllocationEnumDataProcessImpl;
-import com.hackathon.validation.StoreAssociateTrackingValidation;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,18 +16,42 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackathon.config.AppProperties;
+import com.hackathon.dto.AssociateLogin;
+import com.hackathon.dto.AssociateRelocationRQ;
+import com.hackathon.dto.AssociateTokenRQ;
+import com.hackathon.dto.Data;
+import com.hackathon.dto.DeviceRegistrationReq;
+import com.hackathon.dto.LocationAndAssociateDetails;
+import com.hackathon.dto.LocationOfAssociateRsp;
+import com.hackathon.dto.PushNotification;
+import com.hackathon.dto.PushNotificationReq;
+import com.hackathon.dto.TrackLocationByTimeReq;
+import com.hackathon.dto.TrackLocationByTimeRsp;
+import com.hackathon.enums.AssociateDetailsEnum;
+import com.hackathon.enums.ZoneDetailsEnum;
+import com.hackathon.model.AssociateAccountDetails;
+import com.hackathon.model.AssociateInSectionTimeRange;
+import com.hackathon.model.BeaconDetails;
+import com.hackathon.model.InMemoryData;
+import com.hackathon.model.ZoneDetails;
+import com.hackathon.process.LocationAllocationEnumDataProcessImpl;
+import com.hackathon.validation.StoreAssociateTrackingValidation;
 
 @Component
 public class StoreAssociateTrackingServiceImpl implements StoreAssociateTrackingService {
 
 	private static Logger logger = Logger.getLogger(StoreAssociateTrackingServiceImpl.class.getName());
-	private static final String PUSH_NOTIFICATION_MESSAGE = "Hi %s! Please move to zone %s and section %s";
+	private static final String PUSH_NOTIFICATION_MESSAGE = "Hi %s! Please relocate to zone= %s to serve the customer there.";
+	private static final String FCM_SERVER_KEY = "AAAAAW5S9Qc:APA91bFgG5TXiO2mlpOS4O0NePD3cOtyf3wICoBX2ZeB9LFZEePO0IZ2Jcjhw8b48wo9mHb4yZRCGLnRZVQEjt5aNCR2_nL-APQ9vcMnxWl-W4H5zhmMhZ9_juyQGljtbKfMYlWjvnnj";
+	private static final String FCM_TO_TOKEN = "fEc7CWCPPLs:APA91bEDmVc8BMQsdA2wdiWuhevgwe97cqhFzyre4wbe0-lB9YR5exYdf83f2c3qibfs90iKkiFME0q9NGMNIPMfDW2svyv-Ga78rtSuffblQRRxkJ_NaSlofHyTcjobT_0OKZswodqy";
 
 	@Autowired
 	private StoreAssociateTrackingValidation storeAssociateTrackingValidation;
@@ -192,41 +215,59 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 
 		InMemoryData.beaconDetails = beaconDetails;
 		
-		if(InMemoryData.beaconDetails == null) {
-			
-		}
 		return beaconDetails;
 	}
 
 	private InputStream getInputStreamFromS3(String s) {
-		/*try {
-			AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-					.withCredentials(DefaultAWSCredentialsProviderChain.getInstance()).build();
-			S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
-			return object.getObjectContent();
+		try {
+			/*
+			 * AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+			 * .withCredentials(DefaultAWSCredentialsProviderChain.getInstance()).build();
+			 * S3Object object = s3Client.getObject(new
+			 * GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s)); return
+			 * object.getObjectContent();
+			 */
 		} catch (Exception e) {
 
 		}
-*/
+
 		return null;
+	}
+	
+	@Override
+	public void setFcmToken(final AssociateTokenRQ associateTokenRQ) {
+		for (Map.Entry<String, String> entry : associateTokenRQ.getRequestData().entrySet()) {
+			InMemoryData.setfcmDeviceToken(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
 	public void sendNotification(final AssociateRelocationRQ associateRelocationRQ) {
 		associateRelocationRQ.getRelocateAssociateReqs().stream().forEach(rq -> {
 			final PushNotificationReq notificationReq = new PushNotificationReq();
-			notificationReq.setTo(this.associateDeviceMapping.get(rq.getAssociateId()));
+			notificationReq.setTo(InMemoryData.fcmDeviceToken.get(rq.getAssociateId()));
+			notificationReq.setPriority("high");
+			
 			final Data data = new Data();
-			data.setMessage(String.format(PUSH_NOTIFICATION_MESSAGE,
-					AssociateDetailsEnum.findAssociateByASID(rq.getAssociateId()),
-					ZoneDetailsEnum.findZoneBySectionId(rq.getDestinationSection()), rq.getDestinationSection()));
+			data.setAssociateId(rq.getAssociateId());
+			data.setToZoneId(rq.getToZoneId());
+			data.setToZoneName(ZoneDetailsEnum.findZoneByZoneId(rq.getToZoneId()).getZoneName());
+			
 			notificationReq.setData(data);
+			
+			String message = String.format(PUSH_NOTIFICATION_MESSAGE, AssociateDetailsEnum.findAssociateByASID(rq.getAssociateId()).getName(), ZoneDetailsEnum.findZoneByZoneId(rq.getToZoneId()));
+			PushNotification notification = new PushNotification("Zone Allocation", message, message, "default", ".ui.scanner.ScannerActivity", "fcm_push_icon");
+			
+			notificationReq.setNotification(notification);
+		
 			final HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-			headers.add("Authorization", "TODO");
-			final HttpEntity<PushNotificationReq> requestEntity = new HttpEntity<>(notificationReq);
-			restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class,
-					new HashMap<>());
+			headers.add("Authorization", "key="+FCM_SERVER_KEY);
+			final HttpEntity<PushNotificationReq> requestEntity = new HttpEntity<>(notificationReq, headers);
+			
+			logger.info("notificationReq="+notificationReq.toString());
+						
+			restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class, new HashMap<>());
 		});
 
 	}

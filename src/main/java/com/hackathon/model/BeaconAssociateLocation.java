@@ -1,7 +1,5 @@
 package com.hackathon.model;
 
-import com.hackathon.enums.ZoneDetailsEnum;
-
 public class BeaconAssociateLocation {
 
 	private int beaconId;

@@ -1,78 +1,62 @@
 $(document).ready(function() {
-	
-//	/drawPieChart();
-	/*$.ajax({
-		url : "/dashboardcount",
+
+	$.ajax({
+		url : "/storeAssociateTracking/getZoneDetails",
+
 		success : function(result) {
-			$("#customerCount").html(result.customers);
-			$("#projectsCount").html(result.projects);
-			$("#vmCount").html(result.virtualMachines);
-			$("#instancescount").html(result.activeInstances);
-		}
-	});*/
 
-	/*$("#registerBtn").click(function() {
+			var data = [];
 
-		if ($.trim($("#fullname").val()) == "") {
-			alert("Please provide your Fullname");
-		} else if ($.trim($("#productsku").val()) == "") {
-			alert("Please provide a Product SKU");
-		} else {
+			for (var i = 0; i < result.length; i++) {
 
-			var datamodel = {
-				fullname : $.trim($("#fullname").val()),
-				productsku : $.trim($("#productsku").val())
-			};
-			var requestmodel = JSON.stringify(datamodel);
+				data.push({
+					"x" : result[i].zoneName,
+					"value" : 15
+				});
 
-			$.ajax({
-				type : "POST",
-				url : "/products/register",
-				headers : {
-					"Content-Type" : "application/json"
-				},
-				data : requestmodel,
-				success : function(data) {
-					alert("Product is registered successfully");
-				},
-				error : function(data) {
-					alert("Product is not registered successfully");
-				}
-			});
+			}
+
+			// create the chart
+
+			var chart = anychart.pie();
+
+			// set the chart title
+
+			/*chart.title("Live distribution of associates zones across the store");*/
+
+			// add the data
+			chart.data(data);
+
+			// display the chart in the container
+
+			chart.container('container');
+
+			chart.draw();
 
 		}
+
 	});
-	
-	$("#loginBtn").click(function() {
-		
-	});*/
 
+	
+	$(document).on("click", "zone-list", function(){
+		viewZonalAllocation($(this));
+	})
 });
 
-var drawPieChart = function drawPieChart(){
-	 $.ajax({
-	        url: "/storeAssociateTracking/getZoneDetails",
-	        success: function(a) {
-	            $("#instancesHTML").html('<strong class="d-block dashtext-1">' + a.total + '</strong><span class="d-block">' + a.month + '</span><small class="d-block"><div>' + a.count + " Instances</div></small>");
-	            var b = $("#visitPieChart");
-	            //var b = document.getElementById('#visitPieChart').getContext('2d');
-	            var c = new Chart(b, {
-	                type: "pie",
-	                options: {
-	                    legend: {
-	                        display: false
-	                    }
-	                },
-	                data: {
-	                    labels: a.zoneName,
-	                    datasets: [ {
-	                        data: a.associateCount,
-	                        borderWidth: 0,
-	                        backgroundColor: [ "#723ac3", "#864DD9", "#9762e6", "#a678eb", "#fff" ],
-	                        hoverBackgroundColor: [ "#723ac3", "#864DD9", "#9762e6", "#a678eb", "#a678eb" ]
-	                    } ]
-	                }
-	            });
-	        }
-	    });
+function viewZonalAllocation($this){
+	var zoneId = $this.attr("id");
+	
+	$.ajax({
+		url : "/storeAssociateTracking/getAllAssociateLocation/"+zoneId,
+		cache:false
+	}).done(function(data){
+		if(data.locationAndAssociateDetailsList != undefined && data.locationAndAssociateDetailsList.length > 0){
+			$.each(data.locationAndAssociateDetailsList, function(i,d){
+				
+			});
+		}
+	}).fail(function(){
+		
+	})
+		
 }

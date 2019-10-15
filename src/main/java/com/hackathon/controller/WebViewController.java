@@ -40,12 +40,12 @@ public class WebViewController {
 	@PostMapping("/doWebLogin")
 	public String adminLogin(@Valid @ModelAttribute AssociateAccountDetails associateAccountDetails, BindingResult bindingResult, Model model) {
 
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
+			logger.info("Login Failed");
 			return "user-login";
 		}
-		
+
 		storeAssociateTrackingServiceImpl.loadAWSDataIntoMemory();
-		
 
 		AssociateAccountDetails loggedIn = storeAssociateTrackingServiceImpl.userLogin(associateAccountDetails);
 		model.addAttribute("associateAccountDetails", loggedIn);
@@ -56,28 +56,24 @@ public class WebViewController {
 
 			return "user-login";
 		}
-		
-		if(loggedIn.getStatus() == 0) {
+
+		if (loggedIn.getStatus() == 0) {
 			return "user-login";
 		}
 
-		/*
-		 * LocationOfAssociateRsp locationOfAssociateRsp =
-		 * storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
-		 * if(locationOfAssociateRsp.getLocationAndAssociateDetailsList() != null &&
-		 * !locationOfAssociateRsp.getLocationAndAssociateDetailsList().isEmpty()) {
-		 * 
-		 * }
-		 */
 		List<ZoneDetails> zoneDetails = storeAssociateTrackingServiceImpl.getZoneDetails();
-		for(ZoneDetails zone : zoneDetails) {
-			LocationOfAssociateRsp locationMapping = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate(String.valueOf(zone.getZoneId()));
-			if(locationMapping.getLocationAndAssociateDetailsList() != null && !locationMapping.getLocationAndAssociateDetailsList().isEmpty()) {
+		for (ZoneDetails zone : zoneDetails) {
+			LocationOfAssociateRsp locationMapping = storeAssociateTrackingServiceImpl
+					.getAllLocationOfAssociate(String.valueOf(zone.getZoneId()));
+			if (locationMapping.getLocationAndAssociateDetailsList() != null
+					&& !locationMapping.getLocationAndAssociateDetailsList().isEmpty()) {
 				zone.setAssociateCount(locationMapping.getLocationAndAssociateDetailsList().size());
 			}
 		}
-		model.addAttribute("zoneDetails", zoneDetails);
 		
+		logger.info("Successfully Logged In");
+		model.addAttribute("zoneDetails", zoneDetails);
+
 		return "dashboard";
 	}
 
@@ -85,7 +81,7 @@ public class WebViewController {
 	public String showLogin(AssociateAccountDetails associateAccountDetails) {
 		return "user-login";
 	}
-	
+
 	@GetMapping("/doLogout")
 	public String doLogout(AssociateAccountDetails associateAccountDetails) {
 		return "user-login";

@@ -5,7 +5,8 @@ import java.util.StringJoiner;
 
 public class BeaconDetails implements Serializable {
 
-    private int beaconId;
+	private static final long serialVersionUID = 1L;
+	private int beaconId;
     private String name;
     private String uuid;
     private String make;

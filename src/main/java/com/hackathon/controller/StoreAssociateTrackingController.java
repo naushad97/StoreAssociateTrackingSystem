@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hackathon.dto.AssociateLogin;
 import com.hackathon.dto.AssociateRelocationRQ;
+import com.hackathon.dto.AssociateTokenRQ;
+import com.hackathon.dto.BaseRsp;
 import com.hackathon.dto.DeviceRegistrationReq;
 import com.hackathon.dto.LocationOfAssociateRsp;
 import com.hackathon.dto.TrackLocationByTimeReq;
@@ -22,6 +26,7 @@ import com.hackathon.dto.TrackLocationByTimeRsp;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
 import com.hackathon.model.BeaconDetails;
+import com.hackathon.model.InMemoryData;
 import com.hackathon.model.ZoneDetails;
 import com.hackathon.service.StoreAssociateTrackingService;
 
@@ -118,16 +123,29 @@ public class StoreAssociateTrackingController {
 	List<ZoneDetails> getZoneDetails() {
 		return storeAssociateTrackingServiceImpl.getZoneDetails();
 	}
+	
+	@PostMapping("/setFcmToken")
+	public ResponseEntity<BaseRsp> setFcmToken(@RequestBody final AssociateTokenRQ associateTokenRQ) {
+		storeAssociateTrackingServiceImpl.setFcmToken(associateTokenRQ);
+		return ResponseEntity.ok().body(new BaseRsp(1, "Token Stored Successfully"));
+	}
+	
+	@GetMapping("/getFcmToken")
+	public ResponseEntity<Map<String, String>> getFcmToken() {
+		return ResponseEntity.ok().body(InMemoryData.fcmDeviceToken);
+	}
 
 	@PostMapping("/notification")
-	public void sendNotification(@RequestBody final AssociateRelocationRQ associateRelocationRQ) {
+	public ResponseEntity<BaseRsp> sendNotification(@RequestBody final AssociateRelocationRQ associateRelocationRQ) {
 		storeAssociateTrackingServiceImpl.sendNotification(associateRelocationRQ);
+		return ResponseEntity.ok().body(new BaseRsp(1, "Notification Sent"));
 	}
 
 	@PostMapping("/register")
 	public void registerMobileRegistrationId(@RequestBody final DeviceRegistrationReq deviceRegistrationReq) {
 		storeAssociateTrackingServiceImpl.registerMobileRegistrationId(deviceRegistrationReq);
 	}
+
 
 	private void loadAWSDataIntoMemory() {
 		getAssociateAccounts();

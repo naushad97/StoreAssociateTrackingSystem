@@ -1,11 +1,13 @@
 package com.hackathon.model;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
 import com.hackathon.enums.AssociateDetailsEnum;
 import com.hackathon.enums.BeaconDetailsEnum;
 import com.hackathon.enums.ZoneDetailsEnum;
-
-import java.util.List;
-import java.util.logging.Logger;
 
 public class InMemoryData {
 
@@ -14,6 +16,7 @@ public class InMemoryData {
     public static List<AssociateAccountDetails> accountDetails;
     public static List<ZoneDetails> zoneDetails;
     public static List<BeaconDetails> beaconDetails;
+    public static Map<String, String> fcmDeviceToken = new HashMap<>();
 
     public static AssociateAccountDetails findAssociateByAppSID(String appSID) {
         if(accountDetails == null){
@@ -94,5 +97,9 @@ public class InMemoryData {
 
     public static boolean isZoneExistsByBeaconUuiD(String uuid){
         return (findZoneByBeaconUuId(uuid) !=null);
+    }
+    
+    public static void setfcmDeviceToken(String userASId, String token) {
+    	fcmDeviceToken.put(userASId, token);
     }
 }

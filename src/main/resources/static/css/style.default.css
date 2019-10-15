@@ -3182,6 +3182,11 @@ a>code {
     color: red;
 }
 
+.anychart-credits, .zonalDetails{
+	display:none;
+}
+
+
 @media ( min-width : 576px) {
 	.card-deck {
 		margin-right: -15px;

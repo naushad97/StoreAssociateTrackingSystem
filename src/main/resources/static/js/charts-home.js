@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/*$(document).ready(function () {
 
     'use strict';
 
@@ -605,7 +605,7 @@ function drawPieChart(){
   	        	
   	        	
   	        	
-  	           /* var c = new Chart(b, {
+  	            var c = new Chart(b, {
   	                type: "pie",
   	                options: {
   	                    legend: {
@@ -621,7 +621,8 @@ function drawPieChart(){
   	                        hoverBackgroundColor: [ "#723ac3", "#864DD9", "#9762e6", "#a678eb", "#a678eb" ]
   	                    } ]
   	                }
-  	            });*/
+  	            });
   	        }
   	    });
   }
+*/
