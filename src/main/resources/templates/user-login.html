@@ -65,7 +65,7 @@
 											</div>
 											<div class="form-group">
 												<label class="form-control-label">Password</label>
-												<input type="text" placeholder="Enter password" class="form-control" id="productsku" th:field="*{userPw}"/>
+												<input type="password" placeholder="Enter password" class="form-control" id="productsku" th:field="*{userPw}"/>
 												<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"  style="color:red"></span>
 											</div>
 											

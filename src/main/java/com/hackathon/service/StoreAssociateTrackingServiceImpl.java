@@ -40,6 +40,7 @@ import com.hackathon.enums.BeaconDetailsEnum;
 import com.hackathon.enums.ZoneDetailsEnum;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
+import com.hackathon.model.BeaconAssociateLocation;
 import com.hackathon.model.BeaconDetails;
 import com.hackathon.model.InMemoryData;
 import com.hackathon.model.ZoneDetails;
@@ -298,6 +299,12 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 	public void registerMobileRegistrationId(final DeviceRegistrationReq deviceRegistrationReq) {
 		this.associateDeviceMapping.put(deviceRegistrationReq.getAssociateId(),
 				deviceRegistrationReq.getRegistrationId());
+	}
+
+	@Override
+	public Map<BeaconAssociateLocation, Long> getAllSavedScannedData() {
+		// TODO Auto-generated method stub
+		return locationAllocationEnumDataProcessImpl.getAllSavedScannedData();
 	}
 
 }

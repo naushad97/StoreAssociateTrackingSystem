@@ -12,6 +12,7 @@ import com.hackathon.dto.TrackLocationByTimeReq;
 import com.hackathon.dto.TrackLocationByTimeRsp;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
+import com.hackathon.model.BeaconAssociateLocation;
 import com.hackathon.model.BeaconDetails;
 import com.hackathon.model.ZoneDetails;
 
@@ -39,5 +40,6 @@ public interface StoreAssociateTrackingService {
 	void registerMobileRegistrationId(DeviceRegistrationReq associateReq);
 	LocationOfAssociateRsp getAllLocationOfAssociate(String zoneId);
 	void setFcmToken(AssociateTokenRQ associateTokenRQ);
+	Map<BeaconAssociateLocation, Long> getAllSavedScannedData();
 
 }

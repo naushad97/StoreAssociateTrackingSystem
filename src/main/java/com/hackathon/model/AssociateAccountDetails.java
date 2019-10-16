@@ -18,7 +18,7 @@ public class AssociateAccountDetails extends BaseRsp implements Serializable {
     private String appSId;
     private String userId;
     
-    @NotBlank @JsonIgnore
+    @NotBlank
     private String userPw;
     private int roleId;
 

@@ -4,29 +4,49 @@ $(document).ready(function() {
 	showLiveDistribution();
 
 	$(document).on("click", ".zone-list", function(){
-		$(".zone-list").removeClass("selected-zone");
+		//$(".zone-list").removeClass("selected-zone");
+		
+		$("li").removeClass("selected-zone");		
+		//$(".zone-list:first").addClass("selected-zone").trigger("click");
 		$(this).addClass("selected-zone");
-		//zoneOptions = "";
+		
 		showLiveDistribution();
 		viewZonalAllocation($(this)); 
-		/*setTimeout(function(){
-			
-		}, 1000);*/
-		
 	});
 	
 	$(document).on("click", ".allocate-to", function(){
 		allocateTo($(this));
 	});
 	
-	$(document).on("click", ".fa-refresh", function(){
+	$(document).on("click", ".fa-refresh", function(){		
+		
+		$("li").removeClass("selected-zone");
+		$(this).addClass("selected-zone");
+		
 		$(".zone-list:first").addClass("selected-zone").trigger("click");
+		
+		$(".statistics-data").hide();
+		$(".live-data").show();
 	});
+	
+	
+	$(document).on("click", ".statistics", function(){
+		$("li").removeClass("selected-zone");
+		$(this).addClass("selected-zone");
+		getAllAssociateTrackingData();
+		$(".statistics-data").show();
+		$(".live-data").hide();
+	});
+	
 	
 	$(".zone-list:first").addClass("selected-zone").trigger("click");
 });
 
 function showLiveDistribution() {
+	
+	$(".statistics-data").hide();
+	$(".live-data").show();
+	
 	$(".loader-img").show();
 	$(".fa-refresh").hide();
 	//zoneOptions = "";
@@ -91,6 +111,8 @@ function showLiveDistribution() {
 }
 
 function viewZonalAllocation($this){
+	$(".statistics-data").hide();
+	$(".live-data").show();
 	
 	$(".loader-img").show();
 	$(".fa-refresh").hide();
@@ -173,4 +195,39 @@ function allocateTo($this){
 		$(".notify-msg").text("Notification failed").show().delay(5000).fadeOut();
 	});
 		
+}
+
+function getAllAssociateTrackingData(){
+	$(".loader-img").show();
+	$(".fa-refresh").hide();
+	
+	$.ajax({
+	    url: "/trackingApi/v1/getAllAssociateTrackingData",
+	    method: 'GET',
+		contentType: 'application/json',
+	    cache: false
+	}).done(function(data) {
+		$(".table-container").html("");
+		$(".statistics-msg").hide();
+		if(data != undefined){
+			$.each(data, function(key, value) {
+				var table="<table class='table table-striped'><thead><tr><th>Associate Name</th><th>Zone/Section</th><th>In-Time</th><th>Out-Time</th><th>TIme Spent</th></tr></thead><tbody>";
+				var tr=""
+			    $.each(value, function(i, v){
+			    	tr+= "<tr><td>"+v.empName+"</td><td>"+v.zone+"</td><td>"+v.entryTime+"</td><td>"+v.exitTime+"</td><td>"+v.timeSpent+"</td></tr>";
+			   });
+				
+				$(".table-container").append(table+tr+"</tbody></table>");
+				$(".table-container").append("<br><br>")
+			});
+		} else {
+			$(".statistics-msg").show();
+		}
+		$(".loader-img").hide();
+		$(".fa-refresh").show();
+		
+	}).fail(function() {
+		$(".table-container").html("");
+		$(".statistics-msg").show();
+	});
 }

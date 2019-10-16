@@ -25,6 +25,7 @@ import com.hackathon.dto.TrackLocationByTimeReq;
 import com.hackathon.dto.TrackLocationByTimeRsp;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
+import com.hackathon.model.BeaconAssociateLocation;
 import com.hackathon.model.BeaconDetails;
 import com.hackathon.model.InMemoryData;
 import com.hackathon.model.ZoneDetails;
@@ -65,6 +66,12 @@ public class StoreAssociateTrackingController {
 		}
 
 		return trackLocationByTimeRsp;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getAllSavedScannedData")
+	Map<BeaconAssociateLocation, Long> getAllSavedScannedData() {
+		return storeAssociateTrackingServiceImpl.getAllSavedScannedData();
+		
 	}
 	
 	

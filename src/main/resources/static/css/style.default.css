@@ -1902,8 +1902,19 @@ input.input-material ~ label.active {
 *     TABLES
 * ==========================================================
 */
+.statistics-list{
+	border-top:1px solid #DB6574;
+}
 .loader-img{
 	display:none;
+	margin-top: -16px;
+    margin-left: -16px;
+    z-index: 1001;
+    position: absolute;
+    height: 160px;
+    width: 160px;
+    top: 20%;
+    left: 50%;
 }
 .fa-refresh{
 	color:#DB6574;
@@ -1933,19 +1944,33 @@ input.input-material ~ label.active {
 	border: none;
 	color:#343a40
 }
+.table-striped .form-control, .table-striped a{
+	color: #fff !important;
+}
+
+option{
+	color: black !important;
+}
+.table-striped select option{
+	color: black !important;
+}
 
 .table-striped tbody tr {
 	-webkit-transition: all 0.3s;
 	transition: all 0.3s;
-	color: grey;
+	color: #fff;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-	background-color: #282b2f;
+	background-color: #DB6574;
 }
 
 .table-striped tbody tr:nth-of-type(odd):hover {
 	background-color: #26292d;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+	background-color: grey;
 }
 
 .table-bordered td, .table-bordered th {
@@ -3213,6 +3238,9 @@ a>code {
 	display:none;
 }
 
+.statistics-data, .statistics-msg{
+	display:none;
+}
 
 @media ( min-width : 576px) {
 	.card-deck {

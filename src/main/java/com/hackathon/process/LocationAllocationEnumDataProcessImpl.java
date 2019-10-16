@@ -283,4 +283,9 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 		return ((Long.parseLong(a[0]) * 60 + Long.parseLong(a[1])) * 60 + Long.parseLong(a[2])) * 1000;
 	}
 
+	public Map<BeaconAssociateLocation, Long> getAllSavedScannedData() {
+		// TODO Auto-generated method stub
+		return associateLocationMap;
+	}
+
 }

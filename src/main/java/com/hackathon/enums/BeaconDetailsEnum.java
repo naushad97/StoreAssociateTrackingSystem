@@ -5,15 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hackathon.model.BeaconDetails;
-import com.hackathon.model.ZoneDetails;
 
 public enum BeaconDetailsEnum {
 
 	BEACON1(1, "B1", "94e3aa37-f2e4-459e-b5dc-76ab97ec3939", "Apple"), //
 	BEACON2(2, "B2", "UID2", "Apple"), //
-	BEACON3(3, "B3", "UID3", "Apple"), //
+	BEACON3(3, "B3", "392008d9-208a-4f48-90de-72b98abacc2b", "Apple"), //
 	BEACON4(4, "B4", "UID4", "Apple"), //
-	BEACON5(5, "B5", "UID5", "Apple");
+	BEACON5(5, "B5", "f0c46299-bdc2-4361-8f90-521926ce50b8", "Apple"); 
 
 	private int beaconId;
 	private String name;
