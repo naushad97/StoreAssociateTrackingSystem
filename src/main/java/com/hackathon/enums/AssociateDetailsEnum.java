@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hackathon.model.AssociateAccountDetails;
-import com.hackathon.model.ZoneDetails;
 
 public enum AssociateDetailsEnum {
 
