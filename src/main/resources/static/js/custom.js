@@ -38,7 +38,7 @@ $(document).ready(function() {
 	});
 
 	
-	$(document).on("click", "zone-list", function(){
+	$(document).on("click", ".zone-list", function(){
 		viewZonalAllocation($(this));
 	})
 });
@@ -47,13 +47,25 @@ function viewZonalAllocation($this){
 	var zoneId = $this.attr("id");
 	
 	$.ajax({
-		url : "/storeAssociateTracking/getAllAssociateLocation/"+zoneId,
+		url : "/storeAssociateTracking/getAllAssociateLocation/" + zoneId,
 		cache:false
 	}).done(function(data){
 		if(data.locationAndAssociateDetailsList != undefined && data.locationAndAssociateDetailsList.length > 0){
 			$.each(data.locationAndAssociateDetailsList, function(i,d){
 				
+				var htmlcontent = '<tr><th scope="row">'
+					+ d[i].associateName + '</th><td>'
+					+ d[i].zoneName + '</td><td>'
+					+ d[i].time + '</td><td>'
+					+ d[i].cpuUsage + '</td></tr>';
+
+			$('#tableBodyHTML').append(htmlcontent);
+				
 			});
+		}else{
+			
+			$('#tableBodyHTML').append("Either your day has not started or there is no info available");
+
 		}
 	}).fail(function(){
 		
