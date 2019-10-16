@@ -6,9 +6,13 @@ $(document).ready(function() {
 	$(document).on("click", ".zone-list", function(){
 		$(".zone-list").removeClass("selected-zone");
 		$(this).addClass("selected-zone");
-		zoneOptions = "";
+		//zoneOptions = "";
 		showLiveDistribution();
 		viewZonalAllocation($(this)); 
+		/*setTimeout(function(){
+			
+		}, 1000);*/
+		
 	});
 	
 	$(document).on("click", ".allocate-to", function(){
@@ -25,14 +29,13 @@ $(document).ready(function() {
 function showLiveDistribution() {
 	$(".loader-img").show();
 	$(".fa-refresh").hide();
-	zoneOptions = "";
+	//zoneOptions = "";
 	
 	$.ajax({
 		url: "/trackingApi/v1/getZoneDetails",
 		success: function (result) {
 			var isAssocPresent = false;
 			var data = [];
-			zoneOptions += "<select class='form-control'><option value=''>--Select Zone--</option>";
 			for (var i = 0; i < result.length; i++) {
 				if(result[i].associateCount > 0){
 					isAssocPresent = true;
@@ -41,11 +44,8 @@ function showLiveDistribution() {
 					"x": result[i].zoneName,
 					"value": result[i].associateCount
 				});
-				zoneOptions += "<option value=" + result[i].zoneId + ">" + result[i].zoneName + "</option>";
 				$("li[id="+result[i].zoneId+"]").find(".associate-count").text("("+result[i].associateCount+")");
 			}
-			zoneOptions += "</select>";
-
 			if (!isAssocPresent) {
 				
 				$(".loader-img").hide();
@@ -100,7 +100,6 @@ function viewZonalAllocation($this){
 	    url: "/trackingApi/v1/getAllAssociateLocation/" + zoneId,
 	    cache: false,
 	}).done(function(data) {
-		
 		$(".zonalDetails").hide();
 	    $("#zonalDetailsTbody").html("");
 	    if (data.locationAndAssociateDetailsList != undefined && data.locationAndAssociateDetailsList.length > 0) {
@@ -109,7 +108,7 @@ function viewZonalAllocation($this){
 	            tr += "<tr>" +
 	                "<td>" + d.associateName + "</td>" +
 	                "<td>" + d.zoneName + "</td>" +
-	                "<td><a href='javascript:void(0)' class='allocate-to' id=" + d.associateAsid + " >Allocate To</a><div>"+zoneOptions+"</div></td>" +
+	                "<td><a href='javascript:void(0)' class='allocate-to' id=" + d.associateAsid + " >Allocate To</a><div>"+getZoneOptions()+"</div></td>" +
 	                "</tr>";
 	        });
 	        $("#zonalDetailsTbody").html(tr);
@@ -117,6 +116,17 @@ function viewZonalAllocation($this){
 	        
 	        $(".loader-img").hide();
 			$(".fa-refresh").show();
+			
+	    } else {
+	    	/* tr += "<tr>" +
+             "<td>This zone/section is yet to open.</td>" +
+             "</tr>";
+	    	 
+	    	    $("#zonalDetailsTbody").html(tr);
+		        $(".zonalDetails").show();*/
+		        
+		        $(".loader-img").hide();
+				$(".fa-refresh").show();
 	    }
 	}).fail(function() {
 	    $(".zonalDetails").hide();
@@ -126,6 +136,19 @@ function viewZonalAllocation($this){
 		
 	});
 		
+}
+
+function getZoneOptions(){
+	if(zoneOptions != ""){
+		return zoneOptions;
+	}
+	zoneOptions += "<select class='form-control'><option value=''>--Select Zone--</option>"; 
+	$(".zone-list").each(function(){
+		zoneOptions += "<option value=" + $(this).attr("id") + ">" +$(this).find("a").text() + "</option>";
+	});
+	zoneOptions += "</select>";
+	
+	return zoneOptions;
 }
 
 function allocateTo($this){
