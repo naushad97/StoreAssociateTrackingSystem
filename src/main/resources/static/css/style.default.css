@@ -1902,6 +1902,9 @@ input.input-material ~ label.active {
 *     TABLES
 * ==========================================================
 */
+.text-underline{
+	text-decoration: underline;
+}
 .statistics-list{
 	border-top:1px solid #DB6574;
 }
