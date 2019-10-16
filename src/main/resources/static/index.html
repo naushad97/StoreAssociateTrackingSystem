@@ -8,12 +8,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="robots" content="all,follow" />
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700" />
-		<link rel="stylesheet" th:href="@{../webjars/bootstrap/4.3.1/css/bootstrap.min.css}"/>
-		<link rel="stylesheet" th:href="@{../webjars/font-awesome/5.11.2/css/fontawesome.min.css}"/>	
-		<link rel="stylesheet" th:href="@{/css/font.css}"/>		
-		<link rel="stylesheet" th:href="@{/css/style.default.css}" id="theme-stylesheet"/>		
-        <link rel="stylesheet" th:href="@{/css/custom.css}"/>
-		<link rel="shortcut icon" th:href="@{/img/favicon.ico}" />
+		<link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="/css/font.css"/>		
+		<link rel="stylesheet" href="/css/style.default.css" id="theme-stylesheet"/>		
+        <link rel="stylesheet" href="/css/custom.css"/>
+		<link rel="shortcut icon" href="/img/favicon.ico" />
 	</head>
 	<body>
 		<header class="header">
@@ -44,41 +43,9 @@
 			<div class="page-content login-content">
 				<div class="login-page-header">
 					<div class="container-fluid">
-						<h2 class="h5 no-margin-bottom">Login</h2>
+						<h2 class="h5 no-margin-bottom"><a href="/viewApi/v1/getLoginPage">Go to Login Page</a></h2>
 					</div>
 				</div>
-				<section class="no-padding-top">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-lg-6 login-container">
-								<div class="block">
-									<div class="title">
-										<!-- <strong class="d-block">Login</strong> -->
-										<!-- <span class="d-block">Login section for Store Manager</span> -->
-									</div>
-									<div class="block-body">
-										<form action="#" th:action="@{/doLogin}" th:object="${associateAccountDetails}"
-										method="post">
-											<div class="form-group">
-												<label class="form-control-label">Associate ID</label>
-												<input type="text" placeholder="Enter ID" class="form-control" id="fullname" th:field="*{userId}" />
-												<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></span>
-											</div>
-											<div class="form-group">
-												<label class="form-control-label">Password</label>
-												<input type="text" placeholder="Enter password" class="form-control" id="productsku" th:field="*{userPw}"/>
-												<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"></span>
-											</div>
-											<div class="form-group">
-												<input type="submit" value="Login" class="btn btn-primary" id="loginBtn" />
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
 				<footer class="footer">
 					<div class="footer__block block no-margin-bottom">
 						<div class="container-fluid text-center">
@@ -91,11 +58,9 @@
 			</div>
 		</div>
 
-		<script th:src="@{../webjars/jquery/3.4.1/jquery.min.js}"></script>
-		<script th:src="@{../webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-		<script th:src="@{../webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
-		<script src="../js/front.js"></script>
-		<script src="../js/custom.js"></script>
+		<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+		<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/webjars/jquery-cookie/1.4.1-1/jquery.cookie.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 	</body>
 </html>

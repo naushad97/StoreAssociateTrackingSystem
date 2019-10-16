@@ -9,8 +9,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="robots" content="all,follow" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700" />
-	<link rel="stylesheet" th:href="@{../webjars/bootstrap/4.3.1/css/bootstrap.min.css}" />
-	<link rel="stylesheet" th:href="@{../webjars/font-awesome/4.7.0/css/font-awesome.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" />
 	<link rel="stylesheet" th:href="@{/css/font.css}" />
 	<link rel="stylesheet" th:href="@{/css/style.default.css}" id="theme-stylesheet" />
 	<link rel="stylesheet" th:href="@{/css/custom.css}" />
@@ -37,7 +37,7 @@
 					</button>
 				</div>
 				<ul>
-					<li class="list-inline-item logout"><a id="logout" href="/associateWebTracking/doLogout" class="nav-link">Logout
+					<li class="list-inline-item logout"><a id="logout" href="/viewApi/v1/doLogout" class="nav-link">Logout
 							<i class="icon-logout"></i>
 					</a>
 					</li>
@@ -49,7 +49,7 @@
 		<nav id="sidebar">
 			<div class="sidebar-header d-flex align-items-center">
 				<div class="avatar">
-					<img src="../img/prithwish_ghosh_avatar.jpg" alt="..." class="img-fluid rounded-circle" />
+					<img src="/img/prithwish_ghosh_avatar.jpg" alt="..." class="img-fluid rounded-circle" />
 				</div>
 				<div class="title">
 					<h1 class="h5" th:text="${associateAccountDetails.name}">Guest</h1>
@@ -58,14 +58,14 @@
 			</div>	<span class="heading">Zones</span>
 			<ul class="list-unstyled">
 				<li th:each="zone : ${zoneDetails}" th:id="${zone.zoneId}" th:class="zone-list">
-					<a href="#" th:text="${zone.zoneName}"></a><span th:text="'('+${zone.associateCount}+')'" class="associate-count"><i class="fa fa-user" aria-hidden="true"></i></span>
+					<a href="javascript:void(0)" th:text="${zone.zoneName}"></a><span th:text="'('+${zone.associateCount}+')'" class="associate-count"></span><i class="fa fa-user associate-human-icon" aria-hidden="true"></i>
 				</li>
 			</ul>
 		</nav>
 		<div class="page-content">
 			<div class="page-header">
 				<div class="container-fluid">
-					<h2 class="h5 no-margin-bottom">Dashboard</h2>
+					<h2 class="h5 no-margin-bottom">Dashboard <img src="/img/ajax-loader-arrow.gif" class="loader-img" height="25" width="25"> <i class="fa fa-refresh" aria-hidden="true"></i> </h2>
 				</div>
 			</div>
 			<section class="no-padding-top no-padding-bottom">
@@ -103,16 +103,17 @@
                                     </tbody>
 
                                 </table> -->
-								<div class="stats-with-chart-1 block">
-									<div class="title">	<strong class="d-block">Live distribution of associates zones across the store</strong>
+								<div class="stats-with-chart-1">
+									<div class="title">	<strong class="d-block">Live distribution of associates across the store</strong>
 									</div>
 									<div class="row d-flex align-items-end justify-content-between">
-										<div class="col-4">
+										<!-- <div class="col-2">
 											<div class="text" id="instancesHTML"></div>
-										</div>
-										<div class="col-8">
+										</div> -->
+										<div class="col-10">
 											<div class="bar-chart chart">
-												<div id="container" style="width: 300px; height: 300px"></div>
+												<div id="container" class="dashboard-chart" style="width: 300px; height: 300px"></div>
+												<div class="no-data"><strong>Hey, either Day has not started or there is no info available at the moment.</strong></div>
 											</div>
 										</div>
 									</div>
@@ -121,7 +122,9 @@
 						</div>
 						<div class="col-lg-6 zonalDetails">
 							<div class="block ">
-							    <table>
+							  <div class="block-body">
+							  <div class="title">	<strong class="d-block">Associate Details</strong><span class="notify-msg"></span></div>
+							    <table class="table table-striped">
 							       <thead>
 							       		<tr>
 							       			<th>Associate Name</th>
@@ -129,8 +132,9 @@
 							       			<th>Allocate To</th>
 							       		</tr>
 							       </thead>
-							    	<tr></tr>
+							    	<tbody id="zonalDetailsTbody"></tbody>
 							    </table>
+							    </div>
 								<!-- <div class="title">	<strong class="d-block">Associate zone assignment</strong><span class="d-block">Allocate different zone to associate</span>
 								</div>
 								<div class="block-body">
@@ -170,13 +174,13 @@
 			</footer>
 		</div>
 	</div>
-	<script th:src="@{../webjars/jquery/3.4.1/jquery.min.js}"></script>
-	<script th:src="@{../webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-	<script th:src="@{../webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
+	<script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
 	<!-- <script th:src="@{../js/charts-home.js}"></script> -->
 	<!-- <script th:src="@{../charts/Chart.min.js}"></script> -->
-	<script th:src="@{../js/front.js}"></script>
-	<script th:src="@{../js/custom.js}"></script>
+	<script th:src="@{/js/front.js}"></script>
+	<script th:src="@{/js/custom.js}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 	<script src="https://cdn.anychart.com/js/8.0.1/anychart-core.min.js"></script>
 	<script src="https://cdn.anychart.com/js/8.0.1/anychart-pie.min.js"></script>

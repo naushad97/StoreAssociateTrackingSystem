@@ -5,6 +5,7 @@ import java.util.StringJoiner;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hackathon.dto.BaseRsp;
 
 public class AssociateAccountDetails extends BaseRsp implements Serializable {
@@ -17,7 +18,7 @@ public class AssociateAccountDetails extends BaseRsp implements Serializable {
     private String appSId;
     private String userId;
     
-    @NotBlank
+    @NotBlank @JsonIgnore
     private String userPw;
     private int roleId;
 
@@ -35,6 +36,15 @@ public class AssociateAccountDetails extends BaseRsp implements Serializable {
         this.appSId = asid;
         this.userId = userId;
         this.userPw = userPw;
+        this.roleId = roleId;
+    }
+    
+    public AssociateAccountDetails(int associateId, String name, String asid, String userId,  int roleId) {
+    	
+        this.associateId = associateId;
+        this.name = name;
+        this.appSId = asid;
+        this.userId = userId;
         this.roleId = roleId;
     }
 

@@ -72,6 +72,4 @@ public enum ZoneDetailsEnum {
 		}
 		return zoneDetails;
 	}
-
-
 }

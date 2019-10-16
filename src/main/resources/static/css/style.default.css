@@ -1902,6 +1902,25 @@ input.input-material ~ label.active {
 *     TABLES
 * ==========================================================
 */
+.loader-img{
+	display:none;
+}
+.fa-refresh{
+	color:#DB6574;
+}
+.no-data, .dashboard-chart{
+	display:none;
+	color:#DB6574;
+}
+.notify-msg{
+	display:none;
+	color: #DB6574;
+	marging-left: 4px;
+}
+.selected-zone{
+	color: #DB6574;
+    background: #282b2f;
+}
 .table {
 	margin-bottom: 0;
 }
@@ -1912,11 +1931,13 @@ input.input-material ~ label.active {
 
 .table thead th {
 	border: none;
+	color:#343a40
 }
 
 .table-striped tbody tr {
 	-webkit-transition: all 0.3s;
 	transition: all 0.3s;
+	color: grey;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -3176,10 +3197,16 @@ a>code {
 }
 
 .associate-count{
-	left: 100px;
+	left: 120px;
     top: 18px;
     position: absolute;
     color: red;
+}
+.associate-human-icon{
+	vertical-align: bottom;
+    top: 22px;
+    left: 105px;
+    position: absolute;
 }
 
 .anychart-credits, .zonalDetails{

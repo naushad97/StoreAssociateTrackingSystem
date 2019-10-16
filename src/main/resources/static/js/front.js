@@ -79,6 +79,14 @@ $(function () {
             $(this).find('i').attr('class', 'fa fa-long-arrow-left');
         }
     });
+    
+    $('#sidebar').toggleClass('shrinked');
+    $('.page-content').toggleClass('active');
+    $(document).trigger('sidebarChanged');
+    
+    $('.navbar-brand .brand-sm').addClass('visible');
+    $('.navbar-brand .brand-big').removeClass('visible');
+    $('.sidebar-toggle').find('i').attr('class', 'fa fa-long-arrow-left');
 
 
     // ------------------------------------------------------ //

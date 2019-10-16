@@ -1,6 +1,11 @@
 package com.hackathon.enums;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import com.hackathon.model.BeaconDetails;
+import com.hackathon.model.ZoneDetails;
 
 public enum BeaconDetailsEnum {
 
@@ -51,6 +56,14 @@ public enum BeaconDetailsEnum {
 
 		return Arrays.stream(BeaconDetailsEnum.values()).filter(obj -> id == obj.getBeaconId()).findFirst()
 				.orElse(null);
+	}
+	
+	public static List<BeaconDetails> getAllBeacons(){
+		List<BeaconDetails> beaconDetails = new ArrayList<BeaconDetails>();
+		for(BeaconDetailsEnum beaconDetailsEnum : BeaconDetailsEnum.values()) {
+			beaconDetails.add(new BeaconDetails(beaconDetailsEnum.beaconId, beaconDetailsEnum.getName(), beaconDetailsEnum.getUid(), beaconDetailsEnum.getMake()));
+		}
+		return beaconDetails;
 	}
 
 	/*public static BeaconDetailsEnum findBeaconIDByUID(String uid, ) {

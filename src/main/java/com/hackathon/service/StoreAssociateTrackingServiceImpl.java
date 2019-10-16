@@ -36,6 +36,7 @@ import com.hackathon.dto.PushNotificationReq;
 import com.hackathon.dto.TrackLocationByTimeReq;
 import com.hackathon.dto.TrackLocationByTimeRsp;
 import com.hackathon.enums.AssociateDetailsEnum;
+import com.hackathon.enums.BeaconDetailsEnum;
 import com.hackathon.enums.ZoneDetailsEnum;
 import com.hackathon.model.AssociateAccountDetails;
 import com.hackathon.model.AssociateInSectionTimeRange;
@@ -49,7 +50,7 @@ import com.hackathon.validation.StoreAssociateTrackingValidation;
 public class StoreAssociateTrackingServiceImpl implements StoreAssociateTrackingService {
 
 	private static Logger logger = Logger.getLogger(StoreAssociateTrackingServiceImpl.class.getName());
-	private static final String PUSH_NOTIFICATION_MESSAGE = "Hi %s! Please relocate to zone= %s to serve the customer there.";
+	private static final String PUSH_NOTIFICATION_MESSAGE = "Hi %s! Please relocate to %s zone to serve the customer there.";
 	private static final String FCM_SERVER_KEY = "AAAAAW5S9Qc:APA91bFgG5TXiO2mlpOS4O0NePD3cOtyf3wICoBX2ZeB9LFZEePO0IZ2Jcjhw8b48wo9mHb4yZRCGLnRZVQEjt5aNCR2_nL-APQ9vcMnxWl-W4H5zhmMhZ9_juyQGljtbKfMYlWjvnnj";
 	private static final String FCM_TO_TOKEN = "fEc7CWCPPLs:APA91bEDmVc8BMQsdA2wdiWuhevgwe97cqhFzyre4wbe0-lB9YR5exYdf83f2c3qibfs90iKkiFME0q9NGMNIPMfDW2svyv-Ga78rtSuffblQRRxkJ_NaSlofHyTcjobT_0OKZswodqy";
 
@@ -85,7 +86,7 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 
 		return new AssociateLogin(0, "Login failed");
 	}
-	
+
 	@Override
 	public AssociateAccountDetails userLogin(AssociateAccountDetails associateAccountDetails) {
 		AssociateAccountDetails accountFound = InMemoryData.findAssociateByAppSID(associateAccountDetails.getAppSId());
@@ -124,38 +125,39 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 	public LocationOfAssociateRsp getAllLocationOfAssociate() {
 		LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
 
-		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl.getAllLocationOfAssociate();
+		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl
+				.getAllLocationOfAssociate();
 
 		locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
 
 		return locationOfAssociateRsp;
 	}
-	
+
 	@Override
 	public LocationOfAssociateRsp getAllLocationOfAssociate(String zoneId) {
 		LocationOfAssociateRsp locationOfAssociateRsp = new LocationOfAssociateRsp();
 
-		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl.getAllLocationOfAssociate(zoneId);
+		List<LocationAndAssociateDetails> locationAndAssociateDetailsList = locationAllocationEnumDataProcessImpl
+				.getAllLocationOfAssociate(zoneId);
 
 		locationOfAssociateRsp.getLocationAndAssociateDetailsList().addAll(locationAndAssociateDetailsList);
 
 		return locationOfAssociateRsp;
 	}
-	
-	
 
 	@Override
 	public Map<String, List<AssociateInSectionTimeRange>> getAllAssociateTrackingData() {
 
 		return locationAllocationEnumDataProcessImpl.getAllAssociateTrackingData();
 	}
-	
+
 	@Override
 	public void loadAWSDataIntoMemory() {
 		getAssociateAccounts();
 		getZoneDetails();
 		getBeaconDetails();
 	}
+
 
 	@Override
 	public List<AssociateAccountDetails> getAssociateAccounts() {
@@ -171,8 +173,13 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		if(associateAccounts == null) {
+			associateAccounts = AssociateDetailsEnum.getAllAssociates();
+		}
+		
 		InMemoryData.accountDetails = associateAccounts;
+		
 		return associateAccounts;
 	}
 
@@ -190,11 +197,21 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 			e.printStackTrace();
 		}
 
-		InMemoryData.zoneDetails = zoneDetails;
-		
-		if(InMemoryData.zoneDetails == null) {
-			return ZoneDetailsEnum.getAllZoneDetails();
+		if (zoneDetails == null) {
+			zoneDetails = ZoneDetailsEnum.getAllZoneDetails();
 		}
+		
+		if(zoneDetails != null) {
+			for (ZoneDetails zone : zoneDetails) {
+				LocationOfAssociateRsp locationMapping = getAllLocationOfAssociate(String.valueOf(zone.getZoneId()));
+				if (locationMapping.getLocationAndAssociateDetailsList() != null
+						&& !locationMapping.getLocationAndAssociateDetailsList().isEmpty()) {
+					zone.setAssociateCount(locationMapping.getLocationAndAssociateDetailsList().size());
+				}
+			}
+		}
+		
+		InMemoryData.zoneDetails = zoneDetails;
 		return zoneDetails;
 	}
 
@@ -202,7 +219,6 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 	public List<BeaconDetails> getBeaconDetails() {
 		List<BeaconDetails> beaconDetails = null;
 		try {
-
 			InputStream objectStream = getInputStreamFromS3("static/beaconDetails.json");
 			if (objectStream != null) {
 				beaconDetails = objectMapper.readValue(objectStream, new TypeReference<List<BeaconDetails>>() {
@@ -213,27 +229,29 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 			e.printStackTrace();
 		}
 
+		if(beaconDetails == null) {
+			beaconDetails = BeaconDetailsEnum.getAllBeacons();
+		}
 		InMemoryData.beaconDetails = beaconDetails;
-		
+
 		return beaconDetails;
 	}
 
 	private InputStream getInputStreamFromS3(String s) {
 		try {
-			/*
-			 * AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-			 * .withCredentials(DefaultAWSCredentialsProviderChain.getInstance()).build();
-			 * S3Object object = s3Client.getObject(new
-			 * GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s)); return
-			 * object.getObjectContent();
-			 */
+
+			AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+					.withCredentials(DefaultAWSCredentialsProviderChain.getInstance()).build();
+			S3Object object = s3Client.getObject(new GetObjectRequest("/elasticbeanstalk-ap-south-1-564820835441", s));
+			return object.getObjectContent();
+
 		} catch (Exception e) {
 
 		}
 
 		return null;
 	}
-	
+
 	@Override
 	public void setFcmToken(final AssociateTokenRQ associateTokenRQ) {
 		for (Map.Entry<String, String> entry : associateTokenRQ.getRequestData().entrySet()) {
@@ -247,27 +265,31 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 			final PushNotificationReq notificationReq = new PushNotificationReq();
 			notificationReq.setTo(InMemoryData.fcmDeviceToken.get(rq.getAssociateId()));
 			notificationReq.setPriority("high");
-			
+
 			final Data data = new Data();
 			data.setAssociateId(rq.getAssociateId());
 			data.setToZoneId(rq.getToZoneId());
 			data.setToZoneName(ZoneDetailsEnum.findZoneByZoneId(rq.getToZoneId()).getZoneName());
-			
+
 			notificationReq.setData(data);
-			
-			String message = String.format(PUSH_NOTIFICATION_MESSAGE, AssociateDetailsEnum.findAssociateByASID(rq.getAssociateId()).getName(), ZoneDetailsEnum.findZoneByZoneId(rq.getToZoneId()));
-			PushNotification notification = new PushNotification("Zone Allocation", message, message, "default", ".ui.scanner.ScannerActivity", "fcm_push_icon");
-			
+
+			String message = String.format(PUSH_NOTIFICATION_MESSAGE,
+					AssociateDetailsEnum.findAssociateByASID(rq.getAssociateId()).getName(),
+					ZoneDetailsEnum.findZoneByZoneId(rq.getToZoneId()).getZoneName());
+			PushNotification notification = new PushNotification("Zone Allocation", message, message, "default",
+					".ui.scanner.ScannerActivity", "fcm_push_icon");
+
 			notificationReq.setNotification(notification);
-		
+
 			final HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-			headers.add("Authorization", "key="+FCM_SERVER_KEY);
+			headers.add("Authorization", "key=" + FCM_SERVER_KEY);
 			final HttpEntity<PushNotificationReq> requestEntity = new HttpEntity<>(notificationReq, headers);
-			
-			logger.info("notificationReq="+notificationReq.toString());
-						
-			restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class, new HashMap<>());
+
+			logger.info("notificationReq=" + notificationReq.toString());
+
+			restTemplate.exchange("https://fcm.googleapis.com/fcm/send", HttpMethod.POST, requestEntity, Object.class,
+					new HashMap<>());
 		});
 
 	}

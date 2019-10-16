@@ -23,7 +23,7 @@ import com.hackathon.service.StoreAssociateTrackingService;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/associateWebTracking")
+@RequestMapping("/viewApi/v1")
 @Scope("request")
 public class WebViewController {
 
@@ -41,11 +41,11 @@ public class WebViewController {
 	public String adminLogin(@Valid @ModelAttribute AssociateAccountDetails associateAccountDetails, BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {
-			logger.info("Login Failed");
+			logger.info("Login Failed"); 
 			return "user-login";
 		}
 
-		storeAssociateTrackingServiceImpl.loadAWSDataIntoMemory();
+		//storeAssociateTrackingServiceImpl.loadAWSDataIntoMemory();
 
 		AssociateAccountDetails loggedIn = storeAssociateTrackingServiceImpl.userLogin(associateAccountDetails);
 		model.addAttribute("associateAccountDetails", loggedIn);
@@ -62,22 +62,23 @@ public class WebViewController {
 		}
 
 		List<ZoneDetails> zoneDetails = storeAssociateTrackingServiceImpl.getZoneDetails();
-		for (ZoneDetails zone : zoneDetails) {
-			LocationOfAssociateRsp locationMapping = storeAssociateTrackingServiceImpl
-					.getAllLocationOfAssociate(String.valueOf(zone.getZoneId()));
-			if (locationMapping.getLocationAndAssociateDetailsList() != null
-					&& !locationMapping.getLocationAndAssociateDetailsList().isEmpty()) {
-				zone.setAssociateCount(locationMapping.getLocationAndAssociateDetailsList().size());
-			}
-		}
+		/*
+		 * for (ZoneDetails zone : zoneDetails) { LocationOfAssociateRsp locationMapping
+		 * = storeAssociateTrackingServiceImpl
+		 * .getAllLocationOfAssociate(String.valueOf(zone.getZoneId())); if
+		 * (locationMapping.getLocationAndAssociateDetailsList() != null &&
+		 * !locationMapping.getLocationAndAssociateDetailsList().isEmpty()) {
+		 * zone.setAssociateCount(locationMapping.getLocationAndAssociateDetailsList().
+		 * size()); } }
+		 */
 		
 		logger.info("Successfully Logged In");
 		model.addAttribute("zoneDetails", zoneDetails);
 
-		return "dashboard";
+		return "dashboard"; 
 	}
 
-	@GetMapping("/loadLoginPage")
+	@GetMapping("/getLoginPage")
 	public String showLogin(AssociateAccountDetails associateAccountDetails) {
 		return "user-login";
 	}
@@ -88,7 +89,7 @@ public class WebViewController {
 	}
 
 	@GetMapping("/")
-	public String main(Model model) {
+	public String main(AssociateAccountDetails associateAccountDetails) {
 		return "user-login";
 	}
 }

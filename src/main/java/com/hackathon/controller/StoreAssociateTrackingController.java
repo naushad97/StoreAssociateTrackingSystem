@@ -32,7 +32,7 @@ import com.hackathon.service.StoreAssociateTrackingService;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/storeAssociateTracking")
+@RequestMapping(value = "/trackingApi/v1")
 public class StoreAssociateTrackingController {
 
 	private static Logger logger = Logger.getLogger(StoreAssociateTrackingController.class.getName());
@@ -44,7 +44,7 @@ public class StoreAssociateTrackingController {
 	AssociateLogin doLogin(@RequestBody AssociateAccountDetails associateAccount) {
 
 		logger.info("ReqData=" + associateAccount.toString());
-		loadAWSDataIntoMemory();
+		//loadAWSDataIntoMemory();
 
 		return storeAssociateTrackingServiceImpl.doLogin(associateAccount);
 	}
@@ -52,7 +52,7 @@ public class StoreAssociateTrackingController {
 	@RequestMapping(method = RequestMethod.POST, value = "/saveBeaconData")
 	TrackLocationByTimeRsp saveBeaconData(@RequestBody TrackLocationByTimeReq trackLocationByTimeReq) {
 
-		loadAWSDataIntoMemory();
+		//loadAWSDataIntoMemory();
 		System.out.println("trackLocationByTimeReq : uid = " + trackLocationByTimeReq);
 
 		TrackLocationByTimeRsp trackLocationByTimeRsp = storeAssociateTrackingServiceImpl
@@ -76,7 +76,7 @@ public class StoreAssociateTrackingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation")
 	LocationOfAssociateRsp getAllLocationOfAssociate() {
  
-		loadAWSDataIntoMemory();
+		//loadAWSDataIntoMemory();
 
 		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate();
 
@@ -90,7 +90,7 @@ public class StoreAssociateTrackingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/getAllAssociateLocation/{zoneId}")
 	LocationOfAssociateRsp getAllLocationOfAssociate(@PathVariable String zoneId) {
  
-		loadAWSDataIntoMemory();
+		//loadAWSDataIntoMemory();
 
 		LocationOfAssociateRsp locationOfAssociateRsp = storeAssociateTrackingServiceImpl.getAllLocationOfAssociate(zoneId);
 
@@ -147,6 +147,12 @@ public class StoreAssociateTrackingController {
 	}
 
 
+	@GetMapping("/loadDataFromAws")
+	public ResponseEntity<BaseRsp> loadDataFromAws(){
+		loadAWSDataIntoMemory();
+		return ResponseEntity.ok().body(new BaseRsp(1, "Data stored into memory"));
+	}
+	
 	private void loadAWSDataIntoMemory() {
 		getAssociateAccounts();
 		getBeaconDetails();

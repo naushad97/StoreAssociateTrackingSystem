@@ -1,6 +1,11 @@
 package com.hackathon.enums;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import com.hackathon.model.AssociateAccountDetails;
+import com.hackathon.model.ZoneDetails;
 
 public enum AssociateDetailsEnum {
 
@@ -76,5 +81,13 @@ public enum AssociateDetailsEnum {
 	public static AssociateDetailsEnum findAssociateByAssociateId(int id) {
 		return Arrays.stream(AssociateDetailsEnum.values()).filter(obj -> id == obj.getAssociateId()).findFirst()
 				.orElse(null);
+	}
+	
+	public static List<AssociateAccountDetails> getAllAssociates() {
+		List<AssociateAccountDetails> associateDetails = new ArrayList<AssociateAccountDetails>();
+		for(AssociateDetailsEnum associateEnum : AssociateDetailsEnum.values()) {
+			associateDetails.add(new AssociateAccountDetails(associateEnum.getAssociateId(), associateEnum.getName(), associateEnum.getAsid(), associateEnum.getUserId(), associateEnum.getUserPw(), associateEnum.getRoleId()));
+		}
+		return associateDetails;
 	}
 }
