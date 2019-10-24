@@ -157,6 +157,7 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 				locationAndAssociateDetails.setZoneName(beaconAssociateLocation.getZone().getZoneName());
 				locationAndAssociateDetails.setSectionName(beaconAssociateLocation.getZone().getSection());
 				locationAndAssociateDetails.setZoneId(String.valueOf(beaconAssociateLocation.getZone().getZoneId()));
+				locationAndAssociateDetails.setCrowdCount(beaconAssociateLocation.getZone().getCrowdCount());
 			}
 
 			locationAndAssociateDetails.setDistance(beaconAssociateLocation.getDistance());
@@ -172,6 +173,7 @@ public class LocationAllocationEnumDataProcessImpl implements LocationAllocation
 			locationAndAssociateDetails.setScanTimeInMillis(beaconAssociateLocation.getScanTimeInMillis());
 			locationAndAssociateDetails.setType(beaconAssociateLocation.getType());
 			locationAndAssociateDetails.setUserId(beaconAssociateLocation.getUserId());
+
 		}
 
 	}

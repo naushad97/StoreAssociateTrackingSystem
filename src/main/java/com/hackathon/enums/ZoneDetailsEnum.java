@@ -8,22 +8,24 @@ import com.hackathon.model.ZoneDetails;
 
 public enum ZoneDetailsEnum {
 
-	ZONE1(1, "Grocery", 1, "Sec1"), //
-	ZONE2(2, "Clothings", 2, "Sec2"), //
-	ZONE3(3, "Electronics", 3, "Sec3"), //
-	ZONE4(4, "Cosmetics", 4, "Sec4"), //
-	ZONE5(5, "Furniture", 5, "Sec5");
+	ZONE1(1, "Grocery", 1, "Sec1", 7), //
+	ZONE2(2, "Clothings", 2, "Sec2", 4), //
+	ZONE3(3, "Electronics", 3, "Sec3", 15), //
+	ZONE4(4, "Cosmetics", 4, "Sec4", 2), //
+	ZONE5(5, "Furniture", 5, "Sec5", 5);
 
 	private int zoneId;
 	private String zoneName;
 	private int beaconId;
 	private String section;
+	private int crowdCount;
 
-	private ZoneDetailsEnum(int zoneId, String zoneName, int beaconId, String section) {
+	private ZoneDetailsEnum(int zoneId, String zoneName, int beaconId, String section, int crowdCount) {
 		this.zoneId = zoneId;
 		this.zoneName = zoneName;
 		this.beaconId = beaconId;
 		this.section = section;
+		this.crowdCount = crowdCount;
 	}
 
 	public int getZoneId() {
@@ -40,6 +42,30 @@ public enum ZoneDetailsEnum {
 
 	public String getSection() {
 		return section;
+	}
+
+	public int getCrowdCount() {
+		return crowdCount;
+	}
+
+	public void setZoneId(int zoneId) {
+		this.zoneId = zoneId;
+	}
+
+	public void setZoneName(String zoneName) {
+		this.zoneName = zoneName;
+	}
+
+	public void setBeaconId(int beaconId) {
+		this.beaconId = beaconId;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	public void setCrowdCount(int crowdCount) {
+		this.crowdCount = crowdCount;
 	}
 
 	public static boolean checkByBiconId(String uid) {
@@ -68,7 +94,7 @@ public enum ZoneDetailsEnum {
 	public static List<ZoneDetails>  getAllZoneDetails(){
 		List<ZoneDetails> zoneDetails = new ArrayList<ZoneDetails>();
 		for(ZoneDetailsEnum zoneDetailsEnum : ZoneDetailsEnum.values()) {
-			zoneDetails.add(new ZoneDetails(zoneDetailsEnum.getZoneId(), zoneDetailsEnum.getBeaconId(), zoneDetailsEnum.getZoneName(), zoneDetailsEnum.getSection()));
+			zoneDetails.add(new ZoneDetails(zoneDetailsEnum.getZoneId(), zoneDetailsEnum.getBeaconId(), zoneDetailsEnum.getZoneName(), zoneDetailsEnum.getSection(), zoneDetailsEnum.getCrowdCount()));
 		}
 		return zoneDetails;
 	}

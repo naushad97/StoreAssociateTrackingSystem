@@ -78,7 +78,7 @@ public class InMemoryData {
         if(zoneDetails == null){
             logger.info("Getting static Data");
             ZoneDetailsEnum zone = ZoneDetailsEnum.findZoneByBiconId(uuid);
-            return new ZoneDetails(zone.getZoneId(), zone.getBeaconId(), zone.getZoneName(), zone.getSection());
+            return new ZoneDetails(zone.getZoneId(), zone.getBeaconId(), zone.getZoneName(), zone.getSection(), zone.getCrowdCount());
         }
 
         logger.info("Getting s3 Data");

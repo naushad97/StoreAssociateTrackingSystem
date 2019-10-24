@@ -92,4 +92,9 @@ public class WebViewController {
 	public String main(AssociateAccountDetails associateAccountDetails) {
 		return "user-login";
 	}
+
+	@GetMapping("/getCrowdCount/{zoneImage}")
+	public String getCrowdCount() {
+		return "user-login";
+	}
 }

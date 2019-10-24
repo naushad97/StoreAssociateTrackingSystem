@@ -25,6 +25,7 @@ public class LocationAndAssociateDetails implements Serializable {
 	private long handshakeTimeInNano;
 	private String userId;
 	private String type;
+	private int crowdCount;
 
 	public String getZoneName() {
 		return zoneName;
@@ -185,4 +186,15 @@ public class LocationAndAssociateDetails implements Serializable {
 		this.associateAsid = associateAsid;
 	}
 
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public int getCrowdCount() {
+		return crowdCount;
+	}
+
+	public void setCrowdCount(int crowdCount) {
+		this.crowdCount = crowdCount;
+	}
 }

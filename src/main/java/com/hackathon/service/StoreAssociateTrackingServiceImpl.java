@@ -211,7 +211,7 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 				}
 			}
 		}
-		
+
 		InMemoryData.zoneDetails = zoneDetails;
 		return zoneDetails;
 	}
@@ -306,5 +306,11 @@ public class StoreAssociateTrackingServiceImpl implements StoreAssociateTracking
 		// TODO Auto-generated method stub
 		return locationAllocationEnumDataProcessImpl.getAllSavedScannedData();
 	}
+
+//	@Override
+//	public long getCrowdCount(String zoneImage){
+//		String command = "powershell.exe  \"C:\\Pathtofile\\script.ps\" ";
+//
+//	}
 
 }

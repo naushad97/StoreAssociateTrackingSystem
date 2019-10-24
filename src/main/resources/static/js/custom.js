@@ -62,7 +62,8 @@ function showLiveDistribution() {
 				}
 				data.push({
 					"x": result[i].zoneName,
-					"value": result[i].associateCount
+					"value": result[i].associateCount,
+					"crowdCount" : result[i].crowdCount,
 				});
 				$("li[id="+result[i].zoneId+"]").find(".associate-count").text("("+result[i].associateCount+")");
 			}
@@ -90,7 +91,7 @@ function showLiveDistribution() {
 			// tooltip settings
 			var tooltip = chart.tooltip();
 			//tooltip.positionMode("point");
-			tooltip.format("Associate Present: <b>{%value}</b><br>Percentage Count:<b>{%yPercentOfTotal}%");
+			tooltip.format("Associate Present: <b>{%value}</b><br>Percentage Count:<b>{%yPercentOfTotal}<br><b>Crowd Density</b>:{%crowdCount}");
 
 			chart.container('container');
 			chart.draw();
@@ -126,14 +127,17 @@ function viewZonalAllocation($this){
 	    $("#zonalDetailsTbody").html("");
 	    if (data.locationAndAssociateDetailsList != undefined && data.locationAndAssociateDetailsList.length > 0) {
 	        var tr = "";
+	        var crowdCount = "";
 	        $.each(data.locationAndAssociateDetailsList, function(i, d) {
 	            tr += "<tr>" +
 	                "<td>" + d.associateName + "</td>" +
 	                "<td>" + d.zoneName + "</td>" +
 	                "<td><a href='javascript:void(0)' class='allocate-to' id=" + d.associateAsid + " >Allocate To</a><div>"+getZoneOptions()+"</div></td>" +
 	                "</tr>";
+	            crowdCount = d.crowdCount;
 	        });
 	        $("#zonalDetailsTbody").html(tr);
+	        $("#crowdDensity").html(crowdCount);
 	        $(".zonalDetails").show();
 	        
 	        $(".loader-img").hide();

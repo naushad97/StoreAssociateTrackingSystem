@@ -11,14 +11,16 @@ public class ZoneDetails implements Serializable {
     private String zoneName;
     private String section;
     private int associateCount;
+    private int crowdCount;
 
     public ZoneDetails(){}
 
-    public ZoneDetails(int zoneId, int beaconId, String zoneName, String section) {
+    public ZoneDetails(int zoneId, int beaconId, String zoneName, String section, int crowdCount) {
         this.zoneId = zoneId;
         this.beaconId = beaconId;
         this.zoneName = zoneName;
         this.section = section;
+        this.crowdCount = crowdCount;
     }
 
     public int getZoneId() {
@@ -57,10 +59,22 @@ public class ZoneDetails implements Serializable {
 		return associateCount;
 	}
 
-    public void setAssociateCount(int associateCount) {
-		this.associateCount = associateCount;
-	}
-    
+    public void setAssociateCount(int associateCount){
+        this.associateCount = associateCount;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public int getCrowdCount() {
+        return crowdCount;
+    }
+
+    public void setCrowdCount(int crowdCount) {
+        this.crowdCount = crowdCount;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", ZoneDetails.class.getSimpleName() + "[", "]")
